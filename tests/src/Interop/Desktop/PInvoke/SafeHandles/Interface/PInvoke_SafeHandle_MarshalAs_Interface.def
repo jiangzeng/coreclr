@@ -1,0 +1,10 @@
+EXPORTS
+	
+	SH_MAIntf
+	SH_MAIntf_Ref
+	
+	SHObjectParam
+	SHStructWithObjectFldParam
+	
+	SHFld_MAIntf
+	

@@ -1,0 +1,9 @@
+EXPORTS
+    In
+    Out
+    Ref
+    RefModify
+    Ret
+    InvokeInCallback
+    InvokeRefCallback
+    InvokeRetCallback

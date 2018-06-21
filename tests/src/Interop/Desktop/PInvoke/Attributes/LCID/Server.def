@@ -1,0 +1,6 @@
+LIBRARY PInvoke_Attributes_LCID.dll
+
+EXPORTS 
+        Marshal_InOut1 PRIVATE
+        Marshal_InOut2 PRIVATE
+        Marshal_InOut4 PRIVATE

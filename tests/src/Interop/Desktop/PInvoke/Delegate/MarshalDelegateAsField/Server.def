@@ -1,0 +1,15 @@
+LIBRARY PInvoke_Delegate_AsField.dll
+
+EXPORTS 
+        CommonMethod PRIVATE
+        CommonMethod1 PRIVATE
+        CommonMethod2 PRIVATE
+        CommonMethod3 PRIVATE
+        TakeDelegateAsFieldInClass_Exp PRIVATE
+        TakeDelegateAsFieldInClass_Seq PRIVATE
+        TakeDelegateAsFieldInStruct_Exp PRIVATE
+        TakeDelegateAsFieldInStruct_Seq PRIVATE
+        Take_DelegatePtrAsFieldInClass_Exp PRIVATE
+        Take_DelegatePtrAsFieldInClass_Seq PRIVATE
+        Take_DelegatePtrAsFieldInStruct_Exp PRIVATE
+        Take_DelegatePtrAsFieldInStruct_Seq PRIVATE
