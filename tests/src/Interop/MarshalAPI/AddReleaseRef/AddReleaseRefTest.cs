@@ -5,8 +5,7 @@ using System.Security;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Collections.Generic;
-using Windows.Foundation.Collections;
-using TestTools = Test;
+using CoreFXTestLibrary;
 
 public class TestClass
 {
@@ -25,7 +24,7 @@ public class TestClass
     }
 }
 
-public class AddReleaseRefTest : Testcase
+public class AddReleaseRefTest
 {
     private object[] TestObjects;
 
@@ -34,37 +33,32 @@ public class AddReleaseRefTest : Testcase
         try //Test for IntPtr.Zero
         {
             Marshal.AddRef(IntPtr.Zero);
-
-            TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-            TestTools.ErrorWriteLine("No exception from AddRef when passed IntPtr.Zero as parameter.");
+            Assert.Fail("Failed AddReleaseRef test. No exception from AddRef when passed IntPtr.Zero as parameter.");
         }
         catch (ArgumentNullException)
         {
-            TestTools.InformationWriteLine("ArgumentNullException thrown by AddRef for IntPtr.Zero as expected.");
+            Console.WriteLine("ArgumentNullException thrown by AddRef for IntPtr.Zero as expected.");
         }
         catch (Exception ex)
         {
-            TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-            TestTools.ErrorWriteLine("Exception occurred: {0}", ex);
+            Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from AddRef when passed IntPtr.Zero as parameter: {0}", ex);
         }
 
         try //Test for IntPtr.Zero
         {
             Marshal.Release(IntPtr.Zero);
-
-            TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-            TestTools.ErrorWriteLine("No exception from Release when passed IntPtr.Zero as parameter.");
+            Assert.Fail("Failed AddReleaseRef test. No exception from Release when passed IntPtr.Zero as parameter.");
         }
         catch (ArgumentNullException)
         {
-            TestTools.InformationWriteLine("ArgumentNullException thrown by Release for IntPtr.Zero as expected.");
+            Console.WriteLine("ArgumentNullException thrown by Release for IntPtr.Zero as expected.");
         }
         catch (Exception ex)
         {
-            TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-            TestTools.ErrorWriteLine("Unexpected Exception occurred: {0}", ex);
+            Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from Release when passed IntPtr.Zero as parameter: {0}", ex);
         }
 
+        Initialize(ref TestObjects);
         foreach (object obj in TestObjects)
         {
             IntPtr ptr = IntPtr.Zero;
@@ -81,55 +75,45 @@ public class AddReleaseRefTest : Testcase
                     retValue = Marshal.AddRef(ptr);
                     if (++refCount != retValue)
                     {
-                        TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-                        TestTools.ErrorWriteLine("Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
+                        Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                     }
 
                     retValue = Marshal.Release(ptr);
                     if (--refCount != retValue)
                     {
-                        TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-                        TestTools.ErrorWriteLine("Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
+                        Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                     }
                 }
 
                 retValue = Marshal.Release(ptr); //This should negate the first AddRedf call before the loops
                 if (--refCount != retValue)
                 {
-                    TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-                    TestTools.ErrorWriteLine("Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
+                    Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                 }
 
                 retValue = Marshal.Release(ptr); //This should negate the GetIUnknownForObject call before the loops
                 if (--refCount != retValue)
                 {
-                    TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-                    TestTools.ErrorWriteLine("Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
+                    Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                 }
             }
             catch (Exception ex)
             {
-                TestTools.ErrorWriteLine("Failed AddReleaseRef test.");
-                TestTools.ErrorWriteLine("Exception occurred: {0}", ex);
+                Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from GetIUnknownForObject: {0}", ex);
             }
         }
     }
 
-    public override bool RunTests()
+    public bool RunTests()
     {
-        TestTools.BeginScenario("AddReleaseRef Tests");
+        Console.WriteLine("AddReleaseRef Tests");
         AddReleaseRefTests();
-
-        TestTools.InformationWriteLine("Success so far: {0}", TestTools.Pass);
-
-        return TestTools.Pass;
+        return true;
     }
 
-    public override bool Initialize()
+    public void Initialize(ref object[] TestObjects)
     {
-        base.Initialize();
-
-        TestObjects = new object[8];
+        TestObjects = new object[7];
 
         TestObjects[0] = 1;                             //int
         TestObjects[1] = 'a';                           //char
@@ -138,14 +122,11 @@ public class AddReleaseRefTest : Testcase
         TestObjects[4] = new TestClass();               //Object of type TestClass 
         TestObjects[5] = new List<int>();               //Projected Type
         TestObjects[6] = new Nullable<int>(2);          //Nullable Type
-        TestObjects[7] = new PropertySet();             //RCW Type
-
-        return Test.Pass;
     }
 
     public static int Main(String[] unusedArgs)
     {
-        if (TestTools.Run(new AddReleaseRefTest()))
+        if (new AddReleaseRefTest().RunTests())
             return 100;
 
         return 99;
