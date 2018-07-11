@@ -77,23 +77,28 @@ public class ReleaseComObjectTest
         }
     }
     
-    public bool RunTests()
+    public void RunTests()
     {
         Console.WriteLine("ReleaseComObject Tests");
         ReleaseComObjectTests();
 
         Console.WriteLine("FinalReleaseComObject Tests");
         FinalReleaseComObjectTests();
-
-        return true;
     }
 
     public static int Main(String[] unusedArgs)
     {
-        if (new ReleaseComObjectTest().RunTests())
-            return 100;
+        try
+        {
+            new ReleaseComObjectTest().RunTests();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Test failure: " + e.Message);
+            return 101;
+        }
 
-        return 99;
+        return 100;
     }
 
 }

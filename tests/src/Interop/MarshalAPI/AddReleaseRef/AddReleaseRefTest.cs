@@ -104,11 +104,10 @@ public class AddReleaseRefTest
         }
     }
 
-    public bool RunTests()
+    public void RunTests()
     {
         Console.WriteLine("AddReleaseRef Tests");
         AddReleaseRefTests();
-        return true;
     }
 
     public void Initialize(ref object[] TestObjects)
@@ -126,10 +125,17 @@ public class AddReleaseRefTest
 
     public static int Main(String[] unusedArgs)
     {
-        if (new AddReleaseRefTest().RunTests())
-            return 100;
+        try
+        {
+            new AddReleaseRefTest().RunTests();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Test failure: " + e.Message);
+            return 101;
+        }
 
-        return 99;
+        return 100;
     }
 
 }
