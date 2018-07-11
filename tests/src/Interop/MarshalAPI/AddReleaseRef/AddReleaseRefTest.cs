@@ -37,11 +37,7 @@ public class AddReleaseRefTest
         }
         catch (ArgumentNullException)
         {
-            Console.WriteLine("ArgumentNullException thrown by AddRef for IntPtr.Zero as expected.");
-        }
-        catch (Exception ex)
-        {
-            Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from AddRef when passed IntPtr.Zero as parameter: {0}", ex);
+            
         }
 
         try //Test for IntPtr.Zero
@@ -51,11 +47,7 @@ public class AddReleaseRefTest
         }
         catch (ArgumentNullException)
         {
-            Console.WriteLine("ArgumentNullException thrown by Release for IntPtr.Zero as expected.");
-        }
-        catch (Exception ex)
-        {
-            Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from Release when passed IntPtr.Zero as parameter: {0}", ex);
+            
         }
 
         Initialize(ref TestObjects);
@@ -65,48 +57,40 @@ public class AddReleaseRefTest
             int refCount = 0; //This should keep a running tally of the current ref count
             int retValue = 0;
 
-            try
+            ptr = Marshal.GetIUnknownForObject(obj);
+            refCount = Marshal.AddRef(ptr); //Inintialize the refCount
+
+            for (int i = 0; i < 10; i++)  //By the end of this loop we should have no additional refCount
             {
-                ptr = Marshal.GetIUnknownForObject(obj);
-                refCount = Marshal.AddRef(ptr); //Inintialize the refCount
-
-                for (int i = 0; i < 10; i++)  //By the end of this loop we should have no additional refCount
-                {
-                    retValue = Marshal.AddRef(ptr);
-                    if (++refCount != retValue)
-                    {
-                        Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
-                    }
-
-                    retValue = Marshal.Release(ptr);
-                    if (--refCount != retValue)
-                    {
-                        Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
-                    }
-                }
-
-                retValue = Marshal.Release(ptr); //This should negate the first AddRedf call before the loops
-                if (--refCount != retValue)
+                retValue = Marshal.AddRef(ptr);
+                if (++refCount != retValue)
                 {
                     Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                 }
 
-                retValue = Marshal.Release(ptr); //This should negate the GetIUnknownForObject call before the loops
+                retValue = Marshal.Release(ptr);
                 if (--refCount != retValue)
                 {
                     Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
                 }
             }
-            catch (Exception ex)
+
+            retValue = Marshal.Release(ptr); //This should negate the first AddRedf call before the loops
+            if (--refCount != retValue)
             {
-                Assert.Fail("Failed AddReleaseRef test. Unexpected Exception occurred from GetIUnknownForObject: {0}", ex);
+                Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
+            }
+
+            retValue = Marshal.Release(ptr); //This should negate the GetIUnknownForObject call before the loops
+            if (--refCount != retValue)
+            {
+                Assert.Fail("Failed AddReleaseRef test. Unexpected ref count. Expected: " + refCount + ", Actual: " + retValue);
             }
         }
     }
 
     public void RunTests()
     {
-        Console.WriteLine("AddReleaseRef Tests");
         AddReleaseRefTests();
     }
 
