@@ -11,6 +11,7 @@ endif(WIN32)
 SET(CLR_INTEROP_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 include_directories(common)
+add_subdirectory(Desktop/PInvokeTest/Primitives/Int)
 add_subdirectory(NativeCallable)
 add_subdirectory(PrimitiveMarshalling/Bool)
 add_subdirectory(PrimitiveMarshalling/UIntPtr)
