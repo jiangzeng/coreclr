@@ -1,7 +1,4 @@
 ﻿//The testcase focus test the BStr with embed null string
-
-#define WIN8P //Disable LCIDConversionAttribute not supported in Win8P, we are still getting PreserveSig and SetLastError coverage
-
 using System.Runtime.InteropServices;
 using System;
 using System.Reflection;
@@ -10,8 +7,6 @@ using CoreFXTestLibrary;
 
 class LCIDTest
 {
-#if !WIN8P
-
     [DllImport(@"LCIDNative.dll", EntryPoint = "Marshal_InOut1")]
     [LCIDConversionAttribute(0)]
     [return: MarshalAs(UnmanagedType.LPStr)]
@@ -32,26 +27,6 @@ class LCIDTest
     [return: MarshalAs(UnmanagedType.LPStr)]
     private static extern StringBuilder MarshalStrB_InOut4([In, Out][MarshalAs(UnmanagedType.LPStr)]StringBuilder s);
 
-#else
-
-    [DllImport(@"LCIDNative.dll", EntryPoint = "Marshal_InOut1")]
-    [return: MarshalAs(UnmanagedType.LPStr)]
-    private static extern StringBuilder MarshalStrB_InOut1([In][MarshalAs(UnmanagedType.I4)]int lcid, [In, Out][MarshalAs(UnmanagedType.LPStr)]StringBuilder s);
-
-    [DllImport(@"LCIDNative.dll", EntryPoint = "Marshal_InOut2")]
-    [return: MarshalAs(UnmanagedType.LPStr)]
-    private static extern StringBuilder MarshalStrB_InOut2([In, Out][MarshalAs(UnmanagedType.LPStr)]StringBuilder s, [In][MarshalAs(UnmanagedType.I4)]int lcid);
-
-    [DllImport(@"LCIDNative.dll", EntryPoint = "Marshal_InOut2", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.LPStr)]
-    private static extern StringBuilder MarshalStrB_InOut3([In, Out][MarshalAs(UnmanagedType.LPStr)]StringBuilder s, [In][MarshalAs(UnmanagedType.I4)]int lcid);
-
-    [DllImport(@"LCIDNative.dll", EntryPoint = "Marshal_InOut4", PreserveSig = false, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.LPStr)]
-    private static extern StringBuilder MarshalStrB_InOut4([In, Out][MarshalAs(UnmanagedType.LPStr)]StringBuilder s, [In][MarshalAs(UnmanagedType.I4)]int lcid);
-
-#endif
-
     //LCID as first argument
     static void Scenario1()
     {
@@ -62,11 +37,7 @@ class LCIDTest
         StringBuilder strBNative = new StringBuilder(" Native", 7);
 
         StringBuilder strPara1 = new StringBuilder(strManaged, strManaged.Length);
-#if !WIN8P
         StringBuilder strRet1 = MarshalStrB_InOut1(strPara1);
-#else
-        StringBuilder strRet1 = MarshalStrB_InOut1(0, strPara1);
-#endif
 
         Assert.AreEqual(expectedStrRet.ToString(), strRet1.ToString(), "Method MarshalStrB_InOut1[Managed Side],The Return string is wrong");
         Assert.AreEqual(strBNative.ToString(), strPara1.ToString(), "Method MarshalStrB_InOut1[Managed Side],The Passed string is wrong");
@@ -82,11 +53,7 @@ class LCIDTest
         StringBuilder strBNative = new StringBuilder(" Native", 7);
 
         StringBuilder strPara2 = new StringBuilder(strManaged, strManaged.Length);
-#if !WIN8P
         StringBuilder strRet2 = MarshalStrB_InOut2(strPara2);
-#else
-        StringBuilder strRet2 = MarshalStrB_InOut2(strPara2, 0);
-#endif
 
         Assert.AreEqual(expectedStrRet.ToString(), strRet2.ToString(), "Method MarshalStrB_InOut2[Managed Side],The Return string is wrong");
         Assert.AreEqual(strBNative.ToString(), strPara2.ToString(), "Method MarshalStrB_InOut2[Managed Side],The Passed string is wrong");
@@ -106,11 +73,7 @@ class LCIDTest
         StringBuilder strBNative = new StringBuilder(" Native", 7);
 
         StringBuilder strPara3 = new StringBuilder(strManaged, strManaged.Length);
-#if !WIN8P
         StringBuilder strRet3 = MarshalStrB_InOut3(strPara3);
-#else
-        StringBuilder strRet3 = MarshalStrB_InOut3(strPara3, 0);
-#endif
 
         Assert.AreEqual(expectedStrRet.ToString(), strRet3.ToString(), "Method MarshalStrB_InOut3[Managed Side],The Return string is wrong");
         Assert.AreEqual(strBNative.ToString(), strPara3.ToString(), "Method MarshalStrB_InOut3[Managed Side],The Passed string is wrong");
@@ -131,11 +94,7 @@ class LCIDTest
         StringBuilder strBNative = new StringBuilder(" Native", 7);
 
         StringBuilder strPara4 = new StringBuilder(strManaged, strManaged.Length);
-#if !WIN8P
         StringBuilder strRet4 = MarshalStrB_InOut4(strPara4);
-#else
-        StringBuilder strRet4 = MarshalStrB_InOut4(strPara4, 0);
-#endif
 
         Assert.AreEqual(expectedStrRet.ToString(), strRet4.ToString(), "Method MarshalStrB_InOut4[Managed Side],The Return string is wrong");
         Assert.AreEqual(strBNative.ToString(), strPara4.ToString(), "Method MarshalStrB_InOut4[Managed Side],The Passed string is wrong");

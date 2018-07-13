@@ -22,7 +22,6 @@ public struct Stru_Exp_DecAsCYAsFld
     public decimal dec;
 }
 
-#if UNSUPPORTED 
 [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Ansi)]
 public struct Stru_Seq_DecAsLPStructAsFld
 {
@@ -33,7 +32,6 @@ public struct Stru_Seq_DecAsLPStructAsFld
     [MarshalAs(UnmanagedType.LPStruct)]
     public decimal dec;
 }
-#endif
 
 public class CMain
 {
@@ -49,7 +47,6 @@ public class CMain
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeStru_Seq_DecAsStructAsFldByInOutRef([MarshalAs(UnmanagedType.FunctionPtr)] Dele_Stru_Seq_DecAsStructAsFldInOutRef dele);
 
-#if NOTSUPPORTED
     // Dec As CY
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeCYByInOutRef([MarshalAs(UnmanagedType.FunctionPtr)] Dele_CYInOutRef dele);
@@ -59,19 +56,16 @@ public class CMain
     static extern bool ReverseCall_CYRet([MarshalAs(UnmanagedType.FunctionPtr)] Dele_CYRet dele);
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeStru_Exp_DecAsCYAsFldByOutRef([MarshalAs(UnmanagedType.FunctionPtr)] Dele_Stru_Exp_DecAsCYAsFldOutRef dele);
-#endif
 
     // Dec As LPStruct
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeDecByInOutRefAsLPStruct([MarshalAs(UnmanagedType.FunctionPtr)] Dele_DecInOutRefAsLPStruct dele);
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeDecByOutRefAsLPStruct([MarshalAs(UnmanagedType.FunctionPtr)] Dele_DecOutRefAsLPStruct dele);
-#if NOTSUPPORTED    
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_DecAsLPStructRet([MarshalAs(UnmanagedType.FunctionPtr)] Dele_DecAsLPStructRet dele);
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_TakeStru_Seq_DecAsLPStructAsFldByInOutRef([MarshalAs(UnmanagedType.FunctionPtr)] Dele_Stru_Seq_DecAsLPStructAsFldInOutRef dele);
-#endif
     //************** ReverseCall Return Int From Net **************//
     [DllImport("RevNative.dll")]
     static extern bool ReverseCall_IntRet([MarshalAs(UnmanagedType.FunctionPtr)] Dele_IntRet dele);
@@ -98,11 +92,9 @@ public class CMain
     delegate bool Dele_DecInOutRefAsLPStruct([MarshalAs(UnmanagedType.LPStruct), In, Out]ref decimal dec);
     delegate bool Dele_DecOutRefAsLPStruct([MarshalAs(UnmanagedType.LPStruct), Out]out decimal dec);
 
-#if NOTSUPPORTED    
     [return:MarshalAs(UnmanagedType.LPStruct)]
     delegate decimal Dele_DecAsLPStructRet();
     delegate bool Dele_Stru_Seq_DecAsLPStructAsFldInOutRef([In, Out]ref Stru_Seq_DecAsLPStructAsFld s);
-#endif
 
     //************** ReverseCall Return Int From Net **************//
     delegate int Dele_IntRet();
@@ -220,7 +212,6 @@ public class CMain
         return decimal.MinValue;
     }
 
-#if UNSUPPORTED    
     static bool TakeStru_Seq_DecAsLPStructAsFldByInOutRef([In, Out] ref Stru_Seq_DecAsLPStructAsFld s)
     {
         if (Equals(decimal.MaxValue, s.dec) && Equals('I', s.cVal) && Equals(1.23, s.dblVal))
@@ -233,7 +224,6 @@ public class CMain
         else
             return false;
     }
-#endif
 
     //************** ReverseCall Return Int From Net **************//
     [return: MarshalAs(UnmanagedType.I4)]
@@ -253,43 +243,34 @@ public class CMain
         Assert.IsTrue(ReverseCall_TakeStru_Seq_DecAsStructAsFldByInOutRef(new Dele_Stru_Seq_DecAsStructAsFldInOutRef(TakeStru_Seq_DecAsStructAsFldByInOutRef)), "Decimal <-> DECIMAL, Marshal As Struct/Field, Passed By In / Out / Ref .");
     }
 
-#if UNSUPPORTED
     static void AsCY()
     {
         // Dec As CY
         Assert.IsTrue(ReverseCall_TakeCYByInOutRef(new Dele_CYInOutRef(TakeCYByInOutRef)));
         Assert.IsTrue(ReverseCall_TakeCYByOutRef(new Dele_CYOutRef(TakeCYByOutRef)));
-        try
-        {
-            ReverseCall_CYRet(new Dele_CYRet(CYRet));
-            Assert.Fail("Expected MarshalDirectiveException from TakeDecAsInOutParamAsLPStructByRef(ref dec) not thrown");
-        }
-        catch (MarshalDirectiveException)
-        {
-
-        }
-
+        Assert.Throws<MarshalDirectiveException>(() => ReverseCall_CYRet(new Dele_CYRet(CYRet)), "Expected MarshalDirectiveException from TakeDecAsInOutParamAsLPStructByRef(ref dec) not thrown");
         Assert.IsTrue(ReverseCall_TakeStru_Exp_DecAsCYAsFldByOutRef(new Dele_Stru_Exp_DecAsCYAsFldOutRef(ReverseCall_TakeStru_Exp_DecAsCYAsFldByOutRef)));
     }
-#endif
 
     static void AsLPStruct()
     {
         Assert.IsTrue(ReverseCall_TakeDecByInOutRefAsLPStruct(new Dele_DecInOutRefAsLPStruct(TakeDecByInOutRefAsLPStruct)), "Decimal <-> DECIMAL, Marshal As LPStruct/Param, Passed By In / Out / Ref");
         Assert.IsTrue(ReverseCall_TakeDecByOutRefAsLPStruct(new Dele_DecOutRefAsLPStruct(TakeDecByOutRefAsLPStruct)), "Decimal <-> DECIMAL, Marshal As LPStruct/Param, Passed By Out / Ref");
-#if NOTSUPPORTED
-        // MCG would fail to compile these methods while desktop throws MarshalDirectiveExceptions
+        // MCG would fail to compile these methods while desktop throws MarshalDirectiveException
+        /* Test failed with exception: 
+         * System.Runtime.InteropServices.MarshalDirectiveException: Method's type signature is not PInvoke compatible.
         Assert.IsTrue(ReverseCall_DecAsLPStructRet(new Dele_DecAsLPStructRet(DecAsLPStructRet)), "Decimal <-> DECIMAL, Marshal As LPStruct/RetVal");
+        */
+        /* Test failed with exception:
+         * Cannot marshal field 'dec' of type 'Stru_Seq_DecAsLPStructAsFld': Invalid managed/unmanaged type combination (Decimal fields must be paired with Struct)
         Assert.IsTrue(ReverseCall_TakeStru_Seq_DecAsLPStructAsFldByInOutRef(new Dele_Stru_Seq_DecAsLPStructAsFldInOutRef(TakeStru_Seq_DecAsLPStructAsFldByInOutRef)), "Decimal <-> DECIMAL, Marshal As LPStruct/Field, Passed By In / Out / Ref");
-#endif        
+        */
     }
     
     static void RunTest()
     {
         AsStruct();
-#if UNSUPPORTED
         AsCY();
-#endif
         AsLPStruct();
     }
 

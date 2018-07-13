@@ -33,16 +33,11 @@ public class CMain
     static extern bool TakeDecAsInOutParamAsLPStructByRef([MarshalAs(UnmanagedType.LPStruct), In, Out] ref decimal dec);
     [DllImport("DecNative.dll")]
     static extern bool TakeDecAsOutParamAsLPStructByRef([MarshalAs(UnmanagedType.LPStruct), Out] out decimal dec);
-#if UNSUPPORTED
-    // ProjectN fails the build while desktop throws MarshalDirectiveException    
     [DllImport("DecNative.dll")]
     [return: MarshalAs(UnmanagedType.LPStruct)]
     static extern decimal RetDec();
-
-    // ProjectN fails the build while desktop throws MarshalDirectiveException
     [DllImport("DecNative.dll")]
     static extern bool TakeStru_Seq_DecAsLPStructAsFldByInOutRef([In, Out] ref Stru_Seq_DecAsLPStructAsFld s);
-#endif
 
     //CY
     [DllImport("DecNative.dll")]
@@ -63,29 +58,17 @@ public class CMain
     {
         // DECIMAL
         decimal dec = decimal.MaxValue;
-        if (TakeDecAsInOutParamAsLPStructByRef(ref dec))
-            Assert.AreEqual(decimal.MinValue, dec);
-        else
-            Assert.Fail("TakeDecAsInOutParamAsLPStructByRef : Returned false");
+        Assert.IsTrue(TakeDecAsInOutParamAsLPStructByRef(ref dec), "TakeDecAsInOutParamAsLPStructByRef : Returned false");
+        Assert.AreEqual(decimal.MinValue, dec);
 
         dec = decimal.Zero;
-        if (TakeDecAsOutParamAsLPStructByRef(out dec))
-            Assert.AreEqual(decimal.MinValue, dec);
-        else
-            Assert.Fail("TakeDecAsOutParamAsLPStructByRef : Returned false");
-
-#if UNSUPPORTED        
-        // Nagtive 
-        try
-        {
-            RetDec();
-            Assert.Fail("Expected MarshalDirectiveException is not thrown");
-        }
-        catch (MarshalDirectiveException)
-        {
-
-        }
-
+        Assert.IsTrue(TakeDecAsOutParamAsLPStructByRef(out dec), "TakeDecAsOutParamAsLPStructByRef : Returned false");
+        Assert.AreEqual(decimal.MinValue, dec);
+        
+        Assert.Throws<MarshalDirectiveException>(() => RetDec(), "Expected MarshalDirectiveException is not thrown");
+        
+        /* Test failed with exception:
+         * Cannot marshal field 'dec' of type 'Stru_Seq_DecAsLPStructAsFld': Invalid managed/unmanaged type combination (Decimal fields must be paired with Struct)
         try
         {
             Stru_Seq_DecAsLPStructAsFld s = new Stru_Seq_DecAsLPStructAsFld();
@@ -105,56 +88,37 @@ public class CMain
         catch (MarshalDirectiveException)
         {
 
-        }
-#endif
+        } 
+        */
     }
 
     static void MarshalAsCurrencyScenario()
     {
         //CY
         decimal cy = CY_MAX_VALUE;
-        if (TakeCYAsInOutParamAsLPStructByRef(ref cy))
-            Assert.AreEqual(CY_MIN_VALUE, cy);
-        else
-            Assert.Fail("TakeCYAsInOutParamAsLPStructByRef : Returned false");
+        Assert.IsTrue(TakeCYAsInOutParamAsLPStructByRef(ref cy), "TakeCYAsInOutParamAsLPStructByRef : Returned false");
+        Assert.AreEqual(CY_MIN_VALUE, cy);
 
         cy = decimal.MaxValue;
-        if (TakeCYAsOutParamAsLPStructByRef(out cy))
-            Assert.AreEqual(CY_MIN_VALUE, cy);
-        else
-            Assert.Fail("TakeCYAsOutParamAsLPStructByRef : Returned false");
+        Assert.IsTrue(TakeCYAsOutParamAsLPStructByRef(out cy), "TakeCYAsOutParamAsLPStructByRef : Returned false");
+        Assert.AreEqual(CY_MIN_VALUE, cy);
 
-        try
-        {
-            CY_MIN_VALUE.Equals(RetCY());
-            Assert.Fail("Expected MarshalDirectiveException is not thrown");
-        }
-        catch (MarshalDirectiveException)
-        {
-
-        }
+        Assert.Throws<MarshalDirectiveException>(() => CY_MIN_VALUE.Equals(RetCY()), "Expected MarshalDirectiveException is not thrown");
 
         Stru_Exp_DecAsCYAsFld s = new Stru_Exp_DecAsCYAsFld();
         s.cy = CY_MAX_VALUE;
         s.wc = 'I';
-
+        Assert.IsTrue(TakeStru_Exp_DecAsCYAsFldByInOutRef(out s), "TakeStru_Exp_DecAsCYAsFldByInOutRef : Returned false");
         if (TakeStru_Exp_DecAsCYAsFldByInOutRef(out s))
-        {
-            Assert.AreEqual(CY_MAX_VALUE, s.cy);
-            Assert.AreEqual('C', s.wc);
-        }
-        else
-            Assert.Fail("TakeStru_Exp_DecAsCYAsFldByInOutRef : Returned false");
+        Assert.AreEqual(CY_MAX_VALUE, s.cy);
+        Assert.AreEqual('C', s.wc);
     }
 
     static int Main()
     {
         try{
             MarshalAsLPStruct();
-#if UNSUPPORTED
-            //see BUG730358 for more info
             MarshalAsCurrencyScenario();
-#endif
             return 100;
         } catch (Exception e){
             Console.WriteLine("Test failure: " + e.Message); 

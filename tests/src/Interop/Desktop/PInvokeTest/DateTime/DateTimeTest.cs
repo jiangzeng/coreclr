@@ -51,8 +51,6 @@ class DatetimeTest
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate bool Del_Marshal_InOut_cdecl([In, Out][MarshalAs(UnmanagedType.Struct)] ref DateTime t);
 
-#if NOTSUPPORTED 
-    //BUG 735119
     #region delegatePinvoke
 
     [DllImport("NativeDateTime.dll", CallingConvention = CallingConvention.StdCall)]
@@ -78,7 +76,6 @@ class DatetimeTest
     private static extern Del_MarshalExpStruct_InOut_cdecl GetDel_Del_MarshalExpStruct_InOut_cdecl();
 
     #endregion
-#endif
 
     #region ReversePInvoke
 
@@ -126,8 +123,7 @@ class DatetimeTest
             #endregion
 
             #region DelegatePInvoke
-#if NOTSUPPORTED
-            //BUG 735119
+
             Del_Marshal_InOut_cdecl del1 = GetDel_Marshal_InOut_cdecl();
             DateTime Date4 = new DateTime(2008, 7, 4);
             Assert.IsTrue(del1(ref Date4), "GetDel_Marshal_InOut_cdecl : Returned false");
@@ -153,7 +149,7 @@ class DatetimeTest
             Del_MarshalExpStruct_InOut_cdecl del5 = GetDel_Del_MarshalExpStruct_InOut_cdecl();
             Assert.IsTrue(del5(ref StDate4), "MarshalExpStruct_InOut_cdecl : Native side check failed");
             Assert.AreEqual(ExpectedRetdate, StDate4.dt, "MarshalExpStruct_InOut_cdecl : Returned date is wrong");
-#endif
+
             #endregion
 
             #region ReversePInvoke
