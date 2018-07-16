@@ -1,6 +1,7 @@
 #include <wtypes.h>
 #include <oaidl.h>
 #include <iostream>
+#include <xplatform.h>
 
 DECIMAL g_DECIMAL_MaxValue = { 0, { 0, 0 }, 0xffffffff, 0xffffffff, 0xffffffffffffffff };
 DECIMAL g_DECIMAL_MinValue  = { 0, { 0, DECIMAL_NEG }, 0xffffffff, 0xffffffff, 0xffffffffffffffff };

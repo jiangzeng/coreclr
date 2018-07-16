@@ -7,6 +7,7 @@
 #include <string.h>
 #include <windows.h>
 #include <oleauto.h>
+#include <xplatform.h>
 
 #define LCID_ENGLISH MAKELCID(MAKELANGID(0x09, 0x01), SORT_DEFAULT)
 

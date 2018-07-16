@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
+#include <xplatform.h>
 
 int intManaged = 1000;
 int intNative = 2000;
