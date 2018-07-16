@@ -257,6 +257,7 @@ public class CMain
         Assert.IsTrue(ReverseCall_TakeDecByInOutRefAsLPStruct(new Dele_DecInOutRefAsLPStruct(TakeDecByInOutRefAsLPStruct)), "Decimal <-> DECIMAL, Marshal As LPStruct/Param, Passed By In / Out / Ref");
         Assert.IsTrue(ReverseCall_TakeDecByOutRefAsLPStruct(new Dele_DecOutRefAsLPStruct(TakeDecByOutRefAsLPStruct)), "Decimal <-> DECIMAL, Marshal As LPStruct/Param, Passed By Out / Ref");
         // MCG would fail to compile these methods while desktop throws MarshalDirectiveException
+        //TODO: failed test scenarios
         /* Test failed with exception: 
          * System.Runtime.InteropServices.MarshalDirectiveException: Method's type signature is not PInvoke compatible.
         Assert.IsTrue(ReverseCall_DecAsLPStructRet(new Dele_DecAsLPStructRet(DecAsLPStructRet)), "Decimal <-> DECIMAL, Marshal As LPStruct/RetVal");

@@ -67,6 +67,7 @@ public class CMain
         
         Assert.Throws<MarshalDirectiveException>(() => RetDec(), "Expected MarshalDirectiveException is not thrown");
         
+        //TODO: failed test scenarios
         /* Test failed with exception:
          * Cannot marshal field 'dec' of type 'Stru_Seq_DecAsLPStructAsFld': Invalid managed/unmanaged type combination (Decimal fields must be paired with Struct)
         try

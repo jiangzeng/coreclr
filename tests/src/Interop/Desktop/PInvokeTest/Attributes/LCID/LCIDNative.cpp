@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <windows.h>
 #include <tchar.h>
+#include <xplatform.h>
 
 char* strManaged = "Managed\0String\0";
 int   lenstrManaged = 7; // the length of strManaged
