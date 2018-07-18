@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using CoreFXTestLibrary;
@@ -158,7 +162,7 @@ class DatetimeTest
             
             return 100;
         } catch (Exception e){
-            Console.WriteLine("Test failure: " + e.Message); 
+            Console.WriteLine($"Test Failure: {e}"); 
             return 101; 
         }
     }

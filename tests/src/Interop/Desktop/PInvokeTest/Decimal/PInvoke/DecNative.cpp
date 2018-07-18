@@ -1,3 +1,7 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 #include <wtypes.h>
 #include <oaidl.h>
 #include <iostream>
@@ -94,7 +98,7 @@ bool CYEqualsToExpected(LPCSTR err_id, const CY& expected, const CY& actual)
 }
 
 // DECIMAL
-extern "C" __declspec(dllexport) BOOL TakeDecAsInOutParamAsLPStructByRef(DECIMAL** lppDec)
+extern "C" DLL_EXPORT BOOL TakeDecAsInOutParamAsLPStructByRef(DECIMAL** lppDec)
 {
     if(DecEqualsToExpected("001.01", g_DECIMAL_MaxValue, **lppDec))
     {
@@ -105,7 +109,7 @@ extern "C" __declspec(dllexport) BOOL TakeDecAsInOutParamAsLPStructByRef(DECIMAL
         return false;
 }
 
-extern "C" __declspec(dllexport) BOOL TakeDecAsOutParamAsLPStructByRef(DECIMAL** lppDec)
+extern "C" DLL_EXPORT BOOL TakeDecAsOutParamAsLPStructByRef(DECIMAL** lppDec)
 {
     if(*lppDec)
     {
@@ -121,12 +125,12 @@ extern "C" __declspec(dllexport) BOOL TakeDecAsOutParamAsLPStructByRef(DECIMAL**
     }
 }
 
-extern "C" __declspec(dllexport) DECIMAL RetDec()
+extern "C" DLL_EXPORT DECIMAL RetDec()
 {
     return g_DECIMAL_MaxValue;
 }
 
-extern "C" __declspec(dllexport) BOOL TakeStru_Seq_DecAsLPStructAsFldByInOutRef(Stru_Seq_DecAsLPStructAsFld* s)
+extern "C" DLL_EXPORT BOOL TakeStru_Seq_DecAsLPStructAsFldByInOutRef(Stru_Seq_DecAsLPStructAsFld* s)
 {
     if(DecEqualsToExpected("001.04.01", g_DECIMAL_MaxValue, *(s->lpDec)) 
         && Equals("001.04.02", 1.23, s->dblVal) 
@@ -143,7 +147,7 @@ extern "C" __declspec(dllexport) BOOL TakeStru_Seq_DecAsLPStructAsFldByInOutRef(
 }
 
 // CY
-extern "C" __declspec(dllexport) BOOL TakeCYAsInOutParamAsLPStructByRef(CY* lpCy)
+extern "C" DLL_EXPORT BOOL TakeCYAsInOutParamAsLPStructByRef(CY* lpCy)
 {
     if(CYEqualsToExpected("002.01", g_CY_MaxValue, *lpCy))
     {
@@ -154,7 +158,7 @@ extern "C" __declspec(dllexport) BOOL TakeCYAsInOutParamAsLPStructByRef(CY* lpCy
         return false;
 }
 
-extern "C" __declspec(dllexport) BOOL TakeCYAsOutParamAsLPStructByRef(CY* lpCy)
+extern "C" DLL_EXPORT BOOL TakeCYAsOutParamAsLPStructByRef(CY* lpCy)
 {
     if(g_CY_Zero == *lpCy) 
     {        
@@ -169,12 +173,12 @@ extern "C" __declspec(dllexport) BOOL TakeCYAsOutParamAsLPStructByRef(CY* lpCy)
     }
 }
 
-extern "C" __declspec(dllexport) CY RetCY()
+extern "C" DLL_EXPORT CY RetCY()
 {
     return g_CY_MinValue;
 }
 
-extern "C" __declspec(dllexport) BOOL TakeStru_Exp_DecAsCYAsFldByInOutRef(Stru_Exp_DecAsCYAsFld* s)
+extern "C" DLL_EXPORT BOOL TakeStru_Exp_DecAsCYAsFldByInOutRef(Stru_Exp_DecAsCYAsFld* s)
 {
     if(CYEqualsToExpected("001.04.01", g_CY_Zero, s->cy) && Equals("001.04.02", (wchar_t)0, s->wc))
     {

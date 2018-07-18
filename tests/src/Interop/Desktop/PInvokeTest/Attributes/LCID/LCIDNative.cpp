@@ -1,4 +1,8 @@
-﻿#include <stdio.h>
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+#include <stdio.h>
 #include <windows.h>
 #include <tchar.h>
 #include <xplatform.h>
@@ -33,7 +37,7 @@ extern "C" LPSTR ReturnFalseString()
 }
 
 //Test Method2
-extern "C" __declspec(dllexport) LPSTR Marshal_InOut1(int lcid, LPSTR s)
+extern "C" DLL_EXPORT LPSTR Marshal_InOut1(int lcid, LPSTR s)
 {
     printf("LCID:%d\n\n",lcid);
 
@@ -64,7 +68,7 @@ extern "C" __declspec(dllexport) LPSTR Marshal_InOut1(int lcid, LPSTR s)
     return ReturnString();
 }
 
-extern "C" __declspec(dllexport) LPSTR Marshal_InOut2(LPSTR s,int lcid)
+extern "C" DLL_EXPORT LPSTR Marshal_InOut2(LPSTR s,int lcid)
 {	
     //Check the Input
     size_t len = strlen(s);
@@ -94,7 +98,7 @@ extern "C" __declspec(dllexport) LPSTR Marshal_InOut2(LPSTR s,int lcid)
     return ReturnString();
 }
 
-extern "C" __declspec(dllexport) HRESULT WINAPI Marshal_InOut4(LPSTR s, int lcid, LPSTR * retVal)
+extern "C" DLL_EXPORT HRESULT WINAPI Marshal_InOut4(LPSTR s, int lcid, LPSTR * retVal)
 {
     //Check the Input
     size_t len = strlen(s);

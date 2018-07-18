@@ -1,5 +1,8 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 // NativeDateTime.cpp : Defines the exported functions for the DLL application.
-//
 
 #include "NativeDateTime.h"
 #include <stdio.h>
@@ -80,7 +83,7 @@ extern "C" void ChangeStru_Exp_DateAsStructAsFld(Stru_Exp_DateAsStructAsFld * St
     VarDateFromStr(SysAllocString(L"8/15/1947"), 0, 0, &(StDate->dt));
 }
 
-extern "C" __declspec(dllexport) BOOL __stdcall Marshal_In_stdcall(DATE d)
+extern "C" DLL_EXPORT BOOL __stdcall Marshal_In_stdcall(DATE d)
 {
     BSTR str;
     DATE ptoD;
@@ -101,7 +104,7 @@ extern "C" __declspec(dllexport) BOOL __stdcall Marshal_In_stdcall(DATE d)
 
 }
 
-extern "C" __declspec(dllexport) BOOL __cdecl Marshal_InOut_cdecl(/*[in,out]*/ DATE* d)
+extern "C" DLL_EXPORT BOOL __cdecl Marshal_InOut_cdecl(/*[in,out]*/ DATE* d)
 {
     BSTR str;
     DATE ptoD;
@@ -121,13 +124,13 @@ extern "C" __declspec(dllexport) BOOL __cdecl Marshal_InOut_cdecl(/*[in,out]*/ D
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) BOOL __stdcall Marshal_Out_stdcall(/*[out]*/ DATE* d)
+extern "C" DLL_EXPORT BOOL __stdcall Marshal_Out_stdcall(/*[out]*/ DATE* d)
 {
     VarDateFromStr(SysAllocString(L"8/15/1947"), 0, 0, d);
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) DATE __stdcall Marshal_Ret_stdcall()
+extern "C" DLL_EXPORT DATE __stdcall Marshal_Ret_stdcall()
 {
     DATE d;
     VarDateFromStr(SysAllocString(L"8/15/1947"), 0, 0, &d);
@@ -135,25 +138,25 @@ extern "C" __declspec(dllexport) DATE __stdcall Marshal_Ret_stdcall()
 }
 
 typedef BOOL (__cdecl * Datetime_Del_Marshal_InOut_cdecl)(/*[in,out]*/ DATE* t);
-extern "C" __declspec(dllexport) Datetime_Del_Marshal_InOut_cdecl __stdcall GetDel_Marshal_InOut_cdecl()
+extern "C" DLL_EXPORT Datetime_Del_Marshal_InOut_cdecl __stdcall GetDel_Marshal_InOut_cdecl()
 {
     return Marshal_InOut_cdecl;
 }
 
 typedef DATE (__stdcall * Datetime_Del_Marshal_Ret_stdcall)();
-extern "C" __declspec(dllexport) Datetime_Del_Marshal_Ret_stdcall __stdcall GetDel_Marshal_Ret_stdcall()
+extern "C" DLL_EXPORT Datetime_Del_Marshal_Ret_stdcall __stdcall GetDel_Marshal_Ret_stdcall()
 {
     return Marshal_Ret_stdcall;
 }
 
 
 typedef BOOL (__stdcall * Datetime_Del_Marshal_Out_stdcall)(/*[out]*/ DATE* t);
-extern "C" __declspec(dllexport)  Datetime_Del_Marshal_Out_stdcall __stdcall GetDel_Marshal_Out_stdcall()
+extern "C" DLL_EXPORT  Datetime_Del_Marshal_Out_stdcall __stdcall GetDel_Marshal_Out_stdcall()
 {
     return Marshal_Out_stdcall;
 }
 
-extern "C" __declspec(dllexport) BOOL __cdecl RevP_Marshal_InOut_cdecl(Datetime_Del_Marshal_InOut_cdecl d)
+extern "C" DLL_EXPORT BOOL __cdecl RevP_Marshal_InOut_cdecl(Datetime_Del_Marshal_InOut_cdecl d)
 {
     DATE ptoD;
     BSTR str;
@@ -176,7 +179,7 @@ extern "C" __declspec(dllexport) BOOL __cdecl RevP_Marshal_InOut_cdecl(Datetime_
 }
 
 
-extern "C" __declspec(dllexport) BOOL __stdcall RevP_Marshal_Ret_stdcall(Datetime_Del_Marshal_Ret_stdcall d)
+extern "C" DLL_EXPORT BOOL __stdcall RevP_Marshal_Ret_stdcall(Datetime_Del_Marshal_Ret_stdcall d)
 {
     DATE date;
     BSTR str;
@@ -192,7 +195,7 @@ extern "C" __declspec(dllexport) BOOL __stdcall RevP_Marshal_Ret_stdcall(Datetim
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) BOOL __cdecl MarshalSeqStruct_InOut_cdecl(/*[in,out]*/ struct Stru_Seq_DateAsStructAsFld * t)
+extern "C" DLL_EXPORT BOOL __cdecl MarshalSeqStruct_InOut_cdecl(/*[in,out]*/ struct Stru_Seq_DateAsStructAsFld * t)
 {
     if(!VerifySeqStruct(t))
         return FALSE;
@@ -201,7 +204,7 @@ extern "C" __declspec(dllexport) BOOL __cdecl MarshalSeqStruct_InOut_cdecl(/*[in
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) BOOL __cdecl MarshalExpStruct_InOut_cdecl(/*[in,out]*/ struct Stru_Exp_DateAsStructAsFld * t)
+extern "C" DLL_EXPORT BOOL __cdecl MarshalExpStruct_InOut_cdecl(/*[in,out]*/ struct Stru_Exp_DateAsStructAsFld * t)
 {
     if(!VerifyExpStruct(t))
         return FALSE;
@@ -212,14 +215,14 @@ extern "C" __declspec(dllexport) BOOL __cdecl MarshalExpStruct_InOut_cdecl(/*[in
 
 
 typedef BOOL (__cdecl * Datetime_Del_MarshalExpStruct_InOut_cdecl)(/*[in,out]*/ struct Stru_Exp_DateAsStructAsFld * t);
-extern "C" __declspec(dllexport) Datetime_Del_MarshalExpStruct_InOut_cdecl __stdcall GetDel_Del_MarshalExpStruct_InOut_cdecl()
+extern "C" DLL_EXPORT Datetime_Del_MarshalExpStruct_InOut_cdecl __stdcall GetDel_Del_MarshalExpStruct_InOut_cdecl()
 {
     return MarshalExpStruct_InOut_cdecl;
 }
 
 
 typedef BOOL (__cdecl * Datetime_Del_MarshalSeqStruct_InOut_cdecl)(/*[in,out]*/ struct Stru_Seq_DateAsStructAsFld * t);
-extern "C" __declspec(dllexport) Datetime_Del_MarshalSeqStruct_InOut_cdecl __stdcall GetDel_Del_MarshalSeqStruct_InOut_cdecl()
+extern "C" DLL_EXPORT Datetime_Del_MarshalSeqStruct_InOut_cdecl __stdcall GetDel_Del_MarshalSeqStruct_InOut_cdecl()
 {
     return MarshalSeqStruct_InOut_cdecl;
 }

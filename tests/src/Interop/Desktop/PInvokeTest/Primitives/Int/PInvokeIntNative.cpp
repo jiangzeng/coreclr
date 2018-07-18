@@ -1,3 +1,7 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 #include <stdio.h>
 #include <windows.h>
 #include <xplatform.h>
@@ -7,7 +11,7 @@ int intNative = 2000;
 int intReturn = 3000;
 int intErrReturn = 4000;
 
-extern "C" __declspec(dllexport) int WINAPI Marshal_In(/*[in]*/int intValue)
+extern "C" DLL_EXPORT int WINAPI Marshal_In(/*[in]*/int intValue)
 {
     //Check the input
     if(intValue != intManaged)
@@ -27,7 +31,7 @@ extern "C" __declspec(dllexport) int WINAPI Marshal_In(/*[in]*/int intValue)
     return intReturn;
 }
 
-extern "C" __declspec(dllexport) int WINAPI Marshal_InOut(/*[In,Out]*/int intValue)
+extern "C" DLL_EXPORT int WINAPI Marshal_InOut(/*[In,Out]*/int intValue)
 {
     //Check the input
     if(intValue != intManaged)
@@ -51,7 +55,7 @@ extern "C" __declspec(dllexport) int WINAPI Marshal_InOut(/*[In,Out]*/int intVal
     return intReturn;
 }
 
-extern "C" __declspec(dllexport) int WINAPI Marshal_Out(/*[Out]*/int intValue)
+extern "C" DLL_EXPORT int WINAPI Marshal_Out(/*[Out]*/int intValue)
 {
     intValue = intNative;
 
@@ -59,7 +63,7 @@ extern "C" __declspec(dllexport) int WINAPI Marshal_Out(/*[Out]*/int intValue)
     return intReturn;
 }
 
-extern "C" __declspec(dllexport) int WINAPI MarshalPointer_In(/*[in]*/int *pintValue)
+extern "C" DLL_EXPORT int WINAPI MarshalPointer_In(/*[in]*/int *pintValue)
 {
     //Check the input
     if(*pintValue != intManaged)
@@ -79,7 +83,7 @@ extern "C" __declspec(dllexport) int WINAPI MarshalPointer_In(/*[in]*/int *pintV
     return intReturn;
 }
 
-extern "C" __declspec(dllexport) int WINAPI MarshalPointer_InOut(/*[in,out]*/int *pintValue)
+extern "C" DLL_EXPORT int WINAPI MarshalPointer_InOut(/*[in,out]*/int *pintValue)
 {
     //Check the input
     if(*pintValue != intManaged)
@@ -103,7 +107,7 @@ extern "C" __declspec(dllexport) int WINAPI MarshalPointer_InOut(/*[in,out]*/int
     return intReturn;
 }
 
-extern "C" __declspec(dllexport) int WINAPI MarshalPointer_Out(/*[out]*/ int *pintValue)
+extern "C" DLL_EXPORT int WINAPI MarshalPointer_Out(/*[out]*/ int *pintValue)
 {
     *pintValue = intNative;
 

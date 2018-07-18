@@ -1,14 +1,10 @@
-// The following ifdef block is the standard way of creating macros which make exporting 
-// from a DLL simpler. All files within this DLL are compiled with the NATIVEDATETIME_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see 
-// NATIVEDATETIME_API functions as being imported from a DLL, whereas this DLL sees symbols
-// defined with this macro as being exported.
-#ifdef NATIVEDATETIME_EXPORTS
-#define NATIVEDATETIME_API __declspec(dllexport)
-#else
-#define NATIVEDATETIME_API __declspec(dllimport)
-#endif
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+#include <xplatform.h>
+
+#define NATIVEDATETIME_API DLL_EXPORT
 
 // This class is exported from the NativeDateTime.dll
 class NATIVEDATETIME_API CNativeDateTime {

@@ -19,7 +19,7 @@ Example:
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Test Failure: {e.Message}");
+            Console.WriteLine($"Test Failure: {e}");
             return 101;
         }
 
