@@ -1,0 +1,15 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+EXPORTS
+        Marshal_Int_InOut
+        Marshal_Int_InOutA
+        Marshal_Int_InOutW
+        MarshalPointer_Int_InOut
+        MarshalPointer_Int_InOutA
+        MarshalPointer_Int_InOutW
+        Marshal_Int_InOut2A
+        Marshal_Int_InOut2W
+        MarshalPointer_Int_InOut2A
+        MarshalPointer_Int_InOut2W
