@@ -5,6 +5,7 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
+using CoreFXTestLibrary;
 
 [assembly: BestFitMapping(false, ThrowOnUnmappableChar = true)]
 
@@ -24,9 +25,6 @@ public class LPStrTestClass
 
 public class BFM_LPStrMarshaler
 {
-    static int iCountErrors = 0;
-    static int iCountTestCases = 0;
-
     [DllImport("LPStr_BestFitMappingNative")]
     public static extern bool LPStrBuffer_In_String([In][MarshalAs(UnmanagedType.LPStr)]String s);
 
@@ -81,12 +79,12 @@ public class BFM_LPStrMarshaler
     [DllImport("LPStr_BestFitMappingNative")]
     public static extern bool LPStrBuffer_InOutByRef_Array_Struct([In, Out][MarshalAs(UnmanagedType.LPArray)]ref LPStrTestStruct[] structArray);
 
-    String GetValidString()
+    static String GetValidString()
     {
         return "This is the initial test string.";
     }
 
-    String GetInvalidString()
+    static String GetInvalidString()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -98,13 +96,13 @@ public class BFM_LPStrMarshaler
         return sbl.ToString();
     }
 
-    StringBuilder GetValidStringBuilder()
+    static StringBuilder GetValidStringBuilder()
     {
         StringBuilder sb = new StringBuilder("test string.");
         return sb;
     }
 
-    StringBuilder GetInvalidStringBuilder()
+    static StringBuilder GetInvalidStringBuilder()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -116,165 +114,47 @@ public class BFM_LPStrMarshaler
         return sbl;
     }
 
-    void testLPStrBufferString()
+    static void testLPStrBufferString()
     {
-        iCountTestCases++;
-        try
-        {
-            if (!LPStrBuffer_In_String(GetInvalidString()))
-            {
-                Console.WriteLine("[Error] Location tc11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce111");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_String(GetInvalidString()), "[Error] Location tlpsbs1"); 
+        Assert.IsTrue(LPStrBuffer_In_String(GetValidString()), "[Error] Location tlpsbs2");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_String(GetValidString()))
-        {
-            Console.WriteLine("[Error] Location tc22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         String cTemp = GetInvalidString();
-        try
-        {
-            if (!LPStrBuffer_InByRef_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tc33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce333");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_String(ref cTemp), "[Error] Location tlpsbs3"); 
 
-        iCountTestCases++;
         cTemp = GetValidString();
-        if (!LPStrBuffer_InByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_String(ref cTemp), "[Error] Location tlpsbs4");
 
-        iCountTestCases++;
-        try
-        {
-            cTemp = GetInvalidString();
-            if (!LPStrBuffer_InOutByRef_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tc55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce555");
-        }
+        cTemp = GetInvalidString();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_String(ref cTemp), "[Error] Location tlpsbs5"); 
 
-        iCountTestCases++;
         cTemp = GetValidString();
         String cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc66");
-            iCountErrors++;
-        }
-        if (cTemp != cTempClone)
-        {
-            Console.WriteLine("[Error] Location tc77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_String(ref cTemp), "[Error] Location tlpsbs6");
+        Assert.AreEqual(cTempClone, cTemp, "[Error] Location tlpsbs7");
     }
 
-    void testLPStrBufferStringBuilder()
+    static void testLPStrBufferStringBuilder()
     {
-        iCountTestCases++;
-        try
-        {
-            if (!LPStrBuffer_In_StringBuilder(GetInvalidStringBuilder()))
-            {
-                Console.WriteLine("[Error] Location tc11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce111");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_StringBuilder(GetInvalidStringBuilder()), "[Error] Location tlpsbsb1"); 
+        Assert.IsTrue(LPStrBuffer_In_StringBuilder(GetValidStringBuilder()), "[Error] Location tlpsbsb2");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_StringBuilder(GetValidStringBuilder()))
-        {
-            Console.WriteLine("[Error] Location tc22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         StringBuilder cTemp = GetInvalidStringBuilder();
-        try
-        {
-            if (!LPStrBuffer_InByRef_StringBuilder(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tc33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce333");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb3"); 
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
-        if (!LPStrBuffer_InByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb4");
 
-        iCountTestCases++;
-        try
-        {
-            cTemp = GetInvalidStringBuilder();
-            if (!LPStrBuffer_InOutByRef_StringBuilder(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tc55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tc555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tce555");
-        }
+        cTemp = GetInvalidStringBuilder();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb5"); 
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
         StringBuilder cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc66");
-            iCountErrors++;
-        }
-        if (cTemp.ToString() != cTempClone.ToString())
-        {
-            Console.WriteLine("[Error] Location tc77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb6");
+        Assert.AreEqual(cTempClone.ToString(), cTemp.ToString() , "[Error] Location tlpsbsb7");
     }
 
-    LPStrTestStruct GetInvalidStruct()
+    static LPStrTestStruct GetInvalidStruct()
     {
         LPStrTestStruct inValidStruct = new LPStrTestStruct();
         inValidStruct.str = GetInvalidString();
@@ -282,8 +162,7 @@ public class BFM_LPStrMarshaler
         return inValidStruct;
     }
 
-
-    LPStrTestStruct GetValidStruct()
+    static LPStrTestStruct GetValidStruct()
     {
         LPStrTestStruct validStruct = new LPStrTestStruct();
         validStruct.str = GetValidString();
@@ -291,7 +170,7 @@ public class BFM_LPStrMarshaler
         return validStruct;
     }
 
-    String[] GetValidArray()
+    static String[] GetValidArray()
     {
         String[] s = new String[3];
 
@@ -302,7 +181,7 @@ public class BFM_LPStrMarshaler
         return s;
     }
 
-    String[] GetInvalidArray()
+    static String[] GetInvalidArray()
     {
         String[] s = new String[3];
 
@@ -313,375 +192,124 @@ public class BFM_LPStrMarshaler
         return s;
     }
 
-    void testLPStrBufferStruct()
+    static void testLPStrBufferStruct()
     {
-        iCountTestCases++;
-        try
-        {
-            if (!LPStrBuffer_In_Struct_String(GetInvalidStruct()))
-            {
-                Console.WriteLine("[Error] Location tlpsbs11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbs111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbse111");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_Struct_String(GetInvalidStruct()), "[Error] Location tlpsbst1"); 
+        Assert.IsTrue(LPStrBuffer_In_Struct_String(GetValidStruct()), "[Error] Location tlpsbst2");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_Struct_String(GetValidStruct()))
-        {
-            Console.WriteLine("[Error] Location tlpsbs22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         LPStrTestStruct cTemp = GetInvalidStruct();
-        try
-        {
-            if (!LPStrBuffer_InByRef_Struct_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsbs33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbs333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbse333");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_Struct_String(ref cTemp), "[Error] Location tlpsbst3"); 
 
-        iCountTestCases++;
         cTemp = GetValidStruct();
-        if (!LPStrBuffer_InByRef_Struct_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsbs44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Struct_String(ref cTemp), "[Error] Location tlpsbst4");
 
-        iCountTestCases++;
-        try
-        {
-            cTemp = GetInvalidStruct();
-            if (!LPStrBuffer_InOutByRef_Struct_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsbs55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbs555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbse555");
-        }
+        cTemp = GetInvalidStruct();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_Struct_String(ref cTemp), "[Error] Location tlpsbst5"); 
 
-        iCountTestCases++;
         cTemp = GetValidStruct();
         LPStrTestStruct cTempClone = new LPStrTestStruct();
         cTempClone.str = cTemp.str;
-        if (!LPStrBuffer_InOutByRef_Struct_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsbs66");
-            iCountErrors++;
-        }
-        if (cTemp.str != cTempClone.str)
-        {
-            Console.WriteLine("[Error] Location tlpsbs77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Struct_String(ref cTemp), "[Error] Location tlpsbst6");
+        Assert.AreEqual(cTempClone.str, cTemp.str, "[Error] Location tlpsbst7");
     }
 
-    void testLPStrBufferClass()
+    static void testLPStrBufferClass()
     {
-        iCountTestCases++;
         LPStrTestClass cTest = new LPStrTestClass();
-        try
-        {
-            cTest.str = GetInvalidString();
-            if (!LPStrBuffer_In_Class_String(cTest))
-            {
-                Console.WriteLine("[Error] Location tlpsbc11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbc111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbce111");
-        }
+        cTest.str = GetInvalidString();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_Class_String(cTest), "[Error] Location tlpsbc1"); 
 
-        iCountTestCases++;
         cTest.str = GetValidString();
-        if (!LPStrBuffer_In_Class_String(cTest))
-        {
-            Console.WriteLine("[Error] Location tlpsbc22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Class_String(cTest), "[Error] Location tlpsbc2");
 
-        iCountTestCases++;
         LPStrTestClass cTemp = new LPStrTestClass();
         cTemp.str = GetInvalidString();
-        try
-        {
-            if (!LPStrBuffer_InByRef_Class_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsbc33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbc333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbce333");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_Class_String(ref cTemp), "[Error] Location tlpsbc3");
 
-        iCountTestCases++;
         cTemp.str = GetValidString();
-        if (!LPStrBuffer_InByRef_Class_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsbc44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Class_String(ref cTemp), "[Error] Location tlpsbc4");
 
-        iCountTestCases++;
-        try
-        {
-            cTemp.str = GetInvalidString();
-            if (!LPStrBuffer_InOutByRef_Class_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsbc55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsbc555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbce555");
-        }
+        cTemp.str = GetInvalidString();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_Class_String(ref cTemp), "[Error] Location tlpsbc5");
 
-        iCountTestCases++;
         cTemp.str = GetValidString();
         LPStrTestClass cTempClone = new LPStrTestClass();
         cTempClone.str = cTemp.str;
-        if (!LPStrBuffer_InOutByRef_Class_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsbc66");
-            iCountErrors++;
-        }
-        if (cTemp.str != cTempClone.str)
-        {
-            Console.WriteLine("[Error] Location tlpsbc77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Class_String(ref cTemp), "[Error] Location tlpsbc6");
+        Assert.AreEqual(cTempClone.str, cTemp.str, "[Error] Location tlpsbc7");
     }
 
-    void testLPStrBufferArray()
+    static void testLPStrBufferArray()
     {
-        iCountTestCases++;
         String[] cTest = null;
-        try
-        {
-            cTest = GetInvalidArray();
-            Console.WriteLine(cTest[0] + " " + cTest[1] + " " + cTest[2] + " ");
-            if (!LPStrBuffer_In_Array_String(cTest))
-            {
-                Console.WriteLine("[Error] Location tlpsba11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae111");
-        }
+        cTest = GetInvalidArray();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_Array_String(cTest), "[Error] Location tlpsba1");
 
-        iCountTestCases++;
         cTest = GetValidArray();
-        if (!LPStrBuffer_In_Array_String(cTest))
-        {
-            Console.WriteLine("[Error] Location tlpsba22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Array_String(cTest), "[Error] Location tlpsba2");
 
-        iCountTestCases++;
         String[] cTemp = GetInvalidArray();
-        try
-        {
-            if (!LPStrBuffer_InByRef_Array_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsba33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae333");
-        }
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_Array_String(ref cTemp), "[Error] Location tlpsba3");
 
-        iCountTestCases++;
         cTemp = GetValidArray();
-        if (!LPStrBuffer_InByRef_Array_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsba44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_String(ref cTemp), "[Error] Location tlpsba4");
 
-        iCountTestCases++;
-        try
-        {
-            cTemp = GetInvalidArray();
-            if (!LPStrBuffer_InOutByRef_Array_String(ref cTemp))
-            {
-                Console.WriteLine("[Error] Location tlpsba55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae555");
-        }
+        cTemp = GetInvalidArray();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_Array_String(ref cTemp), "[Error] Location tlpsba5");
 
-        iCountTestCases++;
         cTemp = GetValidArray();
         String[] cTempClone = new String[3];
         cTempClone[0] = cTemp[0];
-        if (!LPStrBuffer_InOutByRef_Array_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tlpsba66");
-            iCountErrors++;
-        }
-        if (cTemp[0] != cTempClone[0])
-        {
-            Console.WriteLine("[Error] Location tlpsba77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_String(ref cTemp), "[Error] Location tlpsba6");
+        Assert.AreEqual(cTempClone[0], cTemp[0], "[Error] Location tlpsba7");
     }
 
-    void testLPStrBufferArrayOfStructs()
+    static void testLPStrBufferArrayOfStructs()
     {
-        iCountTestCases++;
         LPStrTestStruct[] lpss = null;
-        try
-        {
-            lpss = new LPStrTestStruct[2];
-            lpss[0] = GetInvalidStruct();
-            lpss[1] = GetInvalidStruct();
-
-            if (!LPStrBuffer_In_Array_Struct(lpss))
-            {
-                Console.WriteLine("[Error] Location tlpsba11");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba111] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae111");
-        }
-
-        iCountTestCases++;
-        lpss = new LPStrTestStruct[2];
-        lpss[0] = GetValidStruct();
-        lpss[1] = GetValidStruct();
-
-        if (!LPStrBuffer_In_Array_Struct(lpss))
-        {
-            Console.WriteLine("[Error] Location tlpsba22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetInvalidStruct();
         lpss[1] = GetInvalidStruct();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_In_Array_Struct(lpss), "[Error] Location tlpsbaos1");
 
-        try
-        {
-            if (!LPStrBuffer_InByRef_Array_Struct(ref lpss))
-            {
-                Console.WriteLine("[Error] Location tlpsba33");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba333] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae333");
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetValidStruct();
         lpss[1] = GetValidStruct();
+        Assert.IsTrue(LPStrBuffer_In_Array_Struct(lpss), "[Error] Location tlpsbaos2");
 
-        if (!LPStrBuffer_InByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("[Error] Location tlpsba44");
-            iCountErrors++;
-        }
+        lpss = new LPStrTestStruct[2];
+        lpss[0] = GetInvalidStruct();
+        lpss[1] = GetInvalidStruct();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos3");
 
-        iCountTestCases++;
-        try
-        {
-            lpss = new LPStrTestStruct[2];
-            lpss[0] = GetInvalidStruct();
-            lpss[1] = GetInvalidStruct();
-
-            if (!LPStrBuffer_InOutByRef_Array_Struct(ref lpss))
-            {
-                Console.WriteLine("[Error] Location tlpsba55");
-                iCountErrors++;
-            }
-            throw new Exception("[Err tlpsba555] Last call should have thrown");
-        }
-        catch (System.ArgumentException)
-        {
-            Console.WriteLine("Expected excpetion tlpsbae555");
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetValidStruct();
         lpss[1] = GetValidStruct();
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos4");
 
+        lpss = new LPStrTestStruct[2];
+        lpss[0] = GetInvalidStruct();
+        lpss[1] = GetInvalidStruct();
+        Assert.Throws<ArgumentException>(() => LPStrBuffer_InOutByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos5");
+
+        lpss = new LPStrTestStruct[2];
+        lpss[0] = GetValidStruct();
+        lpss[1] = GetValidStruct();
         LPStrTestStruct[] lpssClone = new LPStrTestStruct[2];
         lpssClone[0].str = lpss[0].str;
         lpssClone[1].str = lpss[1].str;
-
-        if (!LPStrBuffer_InOutByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("[Error] Location tlpsba66");
-            iCountErrors++;
-        }
-        if (lpssClone[0].str != lpss[0].str)
-        {
-            Console.WriteLine("[Error] Location tlpsba77");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos6");
+        Assert.AreEqual(lpss[0].str, lpssClone[0].str, "[Error] Location tlpsbaos7");
     }
 
-    Boolean runTest()
+    static void runTest()
     {
         testLPStrBufferString();
-
         testLPStrBufferStringBuilder();
-
         testLPStrBufferStruct();
-
         testLPStrBufferArray();
-
         testLPStrBufferClass();
-
         testLPStrBufferArrayOfStructs();
-
-        if (iCountErrors > 0)
-            return false;
-
-        return true;
     }
 
     public static int Main()
@@ -691,40 +319,19 @@ public class BFM_LPStrMarshaler
             Console.WriteLine("Non english platforms are not supported");
             Console.WriteLine("passing without running tests");
 
-            Console.WriteLine("--- Sucess");
+            Console.WriteLine("--- Success");
             return 100;
         }
-
-        Boolean bResult = false;
-        BFM_LPStrMarshaler v = new BFM_LPStrMarshaler();
 
         try
         {
-            bResult = v.runTest();
+            runTest();
+            return 100;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.ToString());
-            bResult = false;
-        }
-
-        // ---------- Final Result --------------
-
-        Console.WriteLine("iCountTestCases : " + iCountTestCases);
-        Console.WriteLine("iCountErrors    : " + iCountErrors);
-
-        if (iCountErrors > 0)
-            bResult = false;
-
-        if (bResult == true)
-        {
-            Console.WriteLine("--- Sucess");
-            return 100;
-        }
-        else
-        {
-            Console.WriteLine("--- FAIL!!");
-            return 11;
+            Console.WriteLine($"Test Failure: {e}"); 
+            return 101;
         }
     }
 }

@@ -5,14 +5,12 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
+using CoreFXTestLibrary;
 
 [assembly: BestFitMapping(false, ThrowOnUnmappableChar = false)]
 
 public class BFM_CharMarshaler
 {
-    static int iCountErrors = 0;
-    static int iCountTestCases = 0;
-
     [DllImport("Char_BestFitMappingNative", BestFitMapping = false, ThrowOnUnmappableChar = false)]
     public static extern bool Char_In([In]char c);
 
@@ -40,12 +38,12 @@ public class BFM_CharMarshaler
     [DllImport("Char_BestFitMappingNative", BestFitMapping = false, ThrowOnUnmappableChar = false)]
     public static extern bool CharBuffer_InOutByRef_StringBuilder([In, Out]ref StringBuilder s);
 
-    String GetValidString()
+    static String GetValidString()
     {
         return "This is the initial test string.";
     }
 
-    String GetInvalidString()
+    static String GetInvalidString()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -57,13 +55,13 @@ public class BFM_CharMarshaler
         return sbl.ToString();
     }
 
-    StringBuilder GetValidStringBuilder()
+    static StringBuilder GetValidStringBuilder()
     {
         StringBuilder sb = new StringBuilder("test string.");
         return sb;
     }
 
-    StringBuilder GetInvalidStringBuilder()
+    static StringBuilder GetInvalidStringBuilder()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -75,212 +73,90 @@ public class BFM_CharMarshaler
         return sbl;
     }
 
-    char GetInvalidChar()
+    static char GetInvalidChar()
     {
         return (char)0x2216;
     }
 
-    char GetValidChar()
+    static char GetValidChar()
     {
         return 'c';
     }
 
-    void testChar()
+    static void testChar()
     {
-        iCountTestCases++;
-        if (!Char_In(GetInvalidChar()))
-        {
-            Console.WriteLine("[Error] Location tc11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_In(GetInvalidChar()), "[Error] Location tc1");
 
-        iCountTestCases++;
-        if (!Char_In(GetValidChar()))
-        {
-            Console.WriteLine("[Error] Location tc22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_In(GetValidChar()), "[Error] Location tc2");
 
-        iCountTestCases++;
         char cTemp = GetInvalidChar();
-        if (!Char_InByRef(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_InByRef(ref cTemp), "[Error] Location tc3");
 
-        iCountTestCases++;
         cTemp = GetValidChar();
-        if (!Char_InByRef(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_InByRef(ref cTemp), "[Error] Location tc4");
 
-        iCountTestCases++;
         cTemp = GetInvalidChar();
-        if (!Char_InOutByRef(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc55");
-            iCountErrors++;
-        }
-        if (cTemp != '?')
-        {
-            Console.WriteLine("Is the default char replacement a question mark on this machine");
-            Console.WriteLine("[Error] Location tc66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_InOutByRef(ref cTemp), "[Error] Location tc5");
+        Assert.AreEqual('?', cTemp, "[Error] Location tc6");
 
-        iCountTestCases++;
         cTemp = GetValidChar();
         char cTempClone = cTemp;
-        if (!Char_InOutByRef(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tc77");
-            iCountErrors++;
-        }
-        if (cTemp != cTempClone)
-        {
-            Console.WriteLine("[Error] Location tc88");
-            iCountErrors++;
-        }
+        Assert.IsTrue(Char_InOutByRef(ref cTemp), "[Error] Location tc7");
+        Assert.AreEqual(cTempClone, cTemp, "[Error] Location tc8");
     }
 
-    void testCharBufferString()
+    static void testCharBufferString()
     {
-        iCountTestCases++;
-        if (!CharBuffer_In_String(GetInvalidString()))
-        {
-            Console.WriteLine("[Error] Location tcbs11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_In_String(GetInvalidString()), "[Error] Location tcbs1");
 
-        iCountTestCases++;
-        if (!CharBuffer_In_String(GetValidString()))
-        {
-            Console.WriteLine("[Error] Location tcbs22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_In_String(GetValidString()), "[Error] Location tcbs2");
 
-        iCountTestCases++;
         String cTemp = GetInvalidString();
-        if (!CharBuffer_InByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InByRef_String(ref cTemp), "[Error] Location tcbs3");
 
-        iCountTestCases++;
         cTemp = GetValidString();
-        if (!CharBuffer_InByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InByRef_String(ref cTemp), "[Error] Location tcbs4");
 
-        iCountTestCases++;
         cTemp = GetInvalidString();
         String cTempClone = cTemp;
-        if (!CharBuffer_InOutByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs55");
-            iCountErrors++;
-        }
-        if (cTemp == cTempClone)
-        {
-            Console.WriteLine("The string should be changed");
-            Console.WriteLine("[Error] Location tcbs66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InOutByRef_String(ref cTemp), "[Error] Location tcbs5");
+        Assert.AreNotEqual(cTempClone, cTemp, "[Error] Location tcbs6");
 
-        iCountTestCases++;
         cTemp = GetValidString();
         cTempClone = cTemp;
-        if (!CharBuffer_InOutByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs77");
-            iCountErrors++;
-        }
-        if (cTemp != cTempClone)
-        {
-            Console.WriteLine("[Error] Location tcbs88");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InOutByRef_String(ref cTemp), "[Error] Location tcbs7");
+        Assert.AreEqual(cTempClone, cTemp, "[Error] Location tcbs8");
     }
 
-    void testCharBufferStringBuilder()
+    static void testCharBufferStringBuilder()
     {
-        iCountTestCases++;
         StringBuilder sb = GetInvalidStringBuilder();
-        if (!CharBuffer_In_StringBuilder(sb))
-        {
-            Console.WriteLine("[Error] Location tcbsb11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_In_StringBuilder(sb), "[Error] Location tcbsb1");
 
-        iCountTestCases++;
-        if (!CharBuffer_In_StringBuilder(GetValidStringBuilder()))
-        {
-            Console.WriteLine("[Error] Location tcbsb22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_In_StringBuilder(GetValidStringBuilder()), "[Error] Location tcbsb2");
 
-        iCountTestCases++;
         StringBuilder cTemp = GetInvalidStringBuilder();
-        if (!CharBuffer_InByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tcbsb3");
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
-        if (!CharBuffer_InByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tcbsb4");
 
-        iCountTestCases++;
         cTemp = GetInvalidStringBuilder();
         StringBuilder cTempClone = cTemp;
-        if (!CharBuffer_InOutByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb55");
-            iCountErrors++;
-        }
-        if (cTemp.ToString() == cTempClone.ToString())
-        {
-            Console.WriteLine("The StringBuilder should be changed");
-            Console.WriteLine("[Error] Location tcbsb66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tcbsb5");
+        Assert.AreNotEqual(cTempClone.ToString(), cTemp.ToString(), "[Error] Location tcbsb6");
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
         cTempClone = cTemp;
-        if (!CharBuffer_InOutByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb77");
-            iCountErrors++;
-        }
-        if (cTemp.ToString() != cTempClone.ToString())
-        {
-            Console.WriteLine("[Error] Location tcbsb88");
-            iCountErrors++;
-        }
+        Assert.IsTrue(CharBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tcbsb7");
+        Assert.AreEqual(cTempClone.ToString(), cTemp.ToString(), "[Error] Location tcbsb8");
     }
 
-    Boolean runTest()
+    static void runTest()
     {
         testChar();
         testCharBufferString();
         testCharBufferStringBuilder();
-
-        if (iCountErrors > 0)
-            return false;
-
-        return true;
     }
 
     public static int Main()
@@ -290,40 +166,17 @@ public class BFM_CharMarshaler
             Console.WriteLine("Non english platforms are not supported");
             Console.WriteLine("passing without running tests");
 
-            Console.WriteLine("--- Sucess");
+            Console.WriteLine("--- Success");
             return 100;
         }
-
-        Boolean bResult = false;
-        BFM_CharMarshaler v = new BFM_CharMarshaler();
 
         try
         {
-            bResult = v.runTest();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-            bResult = false;
-        }
-
-        // ---------- Final Result --------------
-
-        Console.WriteLine("iCountTestCases : " + iCountTestCases);
-        Console.WriteLine("iCountErrors    : " + iCountErrors);
-
-        if (iCountErrors > 0)
-            bResult = false;
-
-        if (bResult == true)
-        {
-            Console.WriteLine("--- Sucess");
+            runTest();
             return 100;
-        }
-        else
-        {
-            Console.WriteLine("--- FAIL!!");
-            return 11;
+        } catch (Exception e){
+            Console.WriteLine($"Test Failure: {e}"); 
+            return 101; 
         }
     }
 }

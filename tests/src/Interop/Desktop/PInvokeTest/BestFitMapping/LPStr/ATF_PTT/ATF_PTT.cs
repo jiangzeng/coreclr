@@ -5,6 +5,7 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
+using CoreFXTestLibrary;
 
 [assembly: BestFitMapping(true, ThrowOnUnmappableChar = false)]
 
@@ -26,9 +27,6 @@ public class LPStrTestClass
 
 public class BFM_LPStrMarshaler
 {
-    static int iCountErrors = 0;
-    static int iCountTestCases = 0;
-
     [DllImport("LPStr_BestFitMappingNative", BestFitMapping = true, ThrowOnUnmappableChar = true)]
     public static extern bool LPStrBuffer_In_String([In][MarshalAs(UnmanagedType.LPStr)]String s);
 
@@ -83,12 +81,12 @@ public class BFM_LPStrMarshaler
     [DllImport("LPStr_BestFitMappingNative", BestFitMapping = false, ThrowOnUnmappableChar = false)]
     public static extern bool LPStrBuffer_InOutByRef_Array_Struct([In, Out][MarshalAs(UnmanagedType.LPArray)]ref LPStrTestStruct[] structArray);
 
-    String GetValidString()
+    static String GetValidString()
     {
         return "This is the initial test string.";
     }
 
-    String GetInvalidString()
+    static String GetInvalidString()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -100,13 +98,13 @@ public class BFM_LPStrMarshaler
         return sbl.ToString();
     }
 
-    StringBuilder GetValidStringBuilder()
+    static StringBuilder GetValidStringBuilder()
     {
         StringBuilder sb = new StringBuilder("test string.");
         return sb;
     }
 
-    StringBuilder GetInvalidStringBuilder()
+    static StringBuilder GetInvalidStringBuilder()
     {
         StringBuilder sbl = new StringBuilder();
         sbl.Append((char)0x2216);
@@ -118,113 +116,53 @@ public class BFM_LPStrMarshaler
         return sbl;
     }
 
-    void testLPStrBufferString()
+    static void testLPStrBufferString()
     {
-        iCountTestCases++;
-        if (!LPStrBuffer_In_String(GetInvalidString()))
-        {
-            Console.WriteLine("[Error] Location tcbs11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_String(GetInvalidString()), "[Error] Location tlpsbs1");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_String(GetValidString()))
-        {
-            Console.WriteLine("[Error] Location tcbs22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_String(GetValidString()), "[Error] Location tlpsbs2");
 
-        iCountTestCases++;
         String cTemp = GetInvalidString();
         String cTempClone = GetInvalidString();
-        if (!LPStrBuffer_InByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_String(ref cTemp), "[Error] Location tlpsbs3");
 
-        iCountTestCases++;
         cTemp = GetValidString();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_String(ref cTemp), "[Error] Location tlpsbs4");
 
-        iCountTestCases++;
         cTemp = GetInvalidString();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs55");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_String(ref cTemp), "[Error] Location tlpsbs5");
 
-        iCountTestCases++;
         cTemp = GetValidString();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_String(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbs66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_String(ref cTemp), "[Error] Location tlpsbs6");
     }
 
-    void testLPStrBufferStringBuilder()
+    static void testLPStrBufferStringBuilder()
     {
-        iCountTestCases++;
-        if (!LPStrBuffer_In_StringBuilder(GetInvalidStringBuilder()))
-        {
-            Console.WriteLine("[Error] Location tcbsb11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_StringBuilder(GetInvalidStringBuilder()), "[Error] Location tlpsbsb1");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_StringBuilder(GetValidStringBuilder()))
-        {
-            Console.WriteLine("[Error] Location tcbsb22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_StringBuilder(GetValidStringBuilder()), "[Error] Location tlpsbsb2");
 
-        iCountTestCases++;
         StringBuilder cTemp = GetInvalidStringBuilder();
         StringBuilder cTempClone = cTemp;
-        if (!LPStrBuffer_InByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb3");
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb4");
 
-        iCountTestCases++;
         cTemp = GetInvalidStringBuilder();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb55");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb5");
 
-        iCountTestCases++;
         cTemp = GetValidStringBuilder();
         cTempClone = cTemp;
-        if (!LPStrBuffer_InOutByRef_StringBuilder(ref cTemp))
-        {
-            Console.WriteLine("[Error] Location tcbsb66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_StringBuilder(ref cTemp), "[Error] Location tlpsbsb6");
     }
 
-    LPStrTestStruct GetInvalidStruct()
+    static LPStrTestStruct GetInvalidStruct()
     {
         LPStrTestStruct inValidStruct = new LPStrTestStruct();
         inValidStruct.str = GetInvalidString();
@@ -232,8 +170,7 @@ public class BFM_LPStrMarshaler
         return inValidStruct;
     }
 
-
-    LPStrTestStruct GetValidStruct()
+    static LPStrTestStruct GetValidStruct()
     {
         LPStrTestStruct validStruct = new LPStrTestStruct();
         validStruct.str = GetValidString();
@@ -241,57 +178,26 @@ public class BFM_LPStrMarshaler
         return validStruct;
     }
 
-    void testLPStrBufferStruct()
+    static void testLPStrBufferStruct()
     {
+        Assert.IsTrue(LPStrBuffer_In_Struct_String(GetInvalidStruct()), "[Error] Location tlpsbst1");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_Struct_String(GetInvalidStruct()))
-        {
-            Console.WriteLine("Error location ctlps11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Struct_String(GetValidStruct()), "[Error] Location tlpsbst2");
 
-        iCountTestCases++;
-        if (!LPStrBuffer_In_Struct_String(GetValidStruct()))
-        {
-            Console.WriteLine("Error location ctlps22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         LPStrTestStruct lpss = GetInvalidStruct();
-        if (!LPStrBuffer_InByRef_Struct_String(ref lpss))
-        {
-            Console.WriteLine("Error location ctlps33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Struct_String(ref lpss), "[Error] Location tlpsbst3");
 
-        iCountTestCases++;
         lpss = GetValidStruct();
-        if (!LPStrBuffer_InByRef_Struct_String(ref lpss))
-        {
-            Console.WriteLine("Error location ctlps44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Struct_String(ref lpss), "[Error] Location tlpsbst4");
 
-        iCountTestCases++;
         lpss = GetInvalidStruct();
-        if (!LPStrBuffer_InOutByRef_Struct_String(ref lpss))
-        {
-            Console.WriteLine("Error location ctlps55");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Struct_String(ref lpss), "[Error] Location tlpsbst5");
 
-        iCountTestCases++;
         lpss = GetValidStruct();
-        if (!LPStrBuffer_InOutByRef_Struct_String(ref lpss))
-        {
-            Console.WriteLine("Error location ctlps66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Struct_String(ref lpss), "[Error] Location tlpsbst6");
     }
 
-    String[] GetValidArray()
+    static String[] GetValidArray()
     {
         String[] s = new String[3];
 
@@ -302,7 +208,7 @@ public class BFM_LPStrMarshaler
         return s;
     }
 
-    String[] GetInvalidArray()
+    static String[] GetInvalidArray()
     {
         String[] s = new String[3];
 
@@ -313,195 +219,90 @@ public class BFM_LPStrMarshaler
         return s;
     }
 
-    void testLPStrBufferArray()
+    static void testLPStrBufferArray()
     {
-        iCountTestCases++;
         String[] s = GetInvalidArray();
-        if (!LPStrBuffer_In_Array_String(s))
-        {
-            Console.WriteLine("Error location ctlpsa11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Array_String(s), "[Error] Location tlpsba1");
 
-        iCountTestCases++;
         s = GetValidArray();
-        if (!LPStrBuffer_In_Array_String(s))
-        {
-            Console.WriteLine("Error location ctlpsa22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Array_String(s), "[Error] Location tlpsba2");
 
-        iCountTestCases++;
         s = GetInvalidArray();
-        if (!LPStrBuffer_InByRef_Array_String(ref s))
-        {
-            Console.WriteLine("Error location ctlpsa33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_String(ref s), "[Error] Location tlpsba3");
 
-        iCountTestCases++;
         s = GetValidArray();
-        if (!LPStrBuffer_InByRef_Array_String(ref s))
-        {
-            Console.WriteLine("Error location ctlpsa44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_String(ref s), "[Error] Location tlpsba4");
 
-        iCountTestCases++;
         s = GetInvalidArray();
-        if (!LPStrBuffer_InOutByRef_Array_String(ref s))
-        {
-            Console.WriteLine("Error location ctlpsa55");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_String(ref s), "[Error] Location tlpsba5");
 
-        iCountTestCases++;
         s = GetValidArray();
-        if (!LPStrBuffer_InOutByRef_Array_String(ref s))
-        {
-            Console.WriteLine("Error location ctlpsa66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_String(ref s), "[Error] Location tlpsba6");
     }
 
-    void testLPStrBufferClass()
+    static void testLPStrBufferClass()
     {
-        iCountTestCases++;
         LPStrTestClass sClass = new LPStrTestClass();
         sClass.str = GetInvalidString();
-        if (!LPStrBuffer_In_Class_String(sClass))
-        {
-            Console.WriteLine("Error location tlpbc11");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Class_String(sClass), "[Error] Location tlpbc1");
 
-        iCountTestCases++;
         sClass.str = GetValidString();
-        if (!LPStrBuffer_In_Class_String(sClass))
-        {
-            Console.WriteLine("Error location tlpbc22");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_In_Class_String(sClass), "[Error] Location tlpbc2");
 
-        iCountTestCases++;
         sClass.str = GetInvalidString();
-        if (!LPStrBuffer_InByRef_Class_String(ref sClass))
-        {
-            Console.WriteLine("Error location tlpbc33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Class_String(ref sClass), "[Error] Location tlpbc3");
 
-        iCountTestCases++;
         sClass.str = GetValidString();
-        if (!LPStrBuffer_InByRef_Class_String(ref sClass))
-        {
-            Console.WriteLine("Error location tlpbc44");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Class_String(ref sClass), "[Error] Location tlpbc4");
 
-        iCountTestCases++;
         sClass.str = GetInvalidString();
-        if (!LPStrBuffer_InOutByRef_Class_String(ref sClass))
-        {
-            Console.WriteLine("Error location tlpbc55");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Class_String(ref sClass), "[Error] Location tlpbc5");
 
-        iCountTestCases++;
         sClass.str = GetValidString();
-        if (!LPStrBuffer_InOutByRef_Class_String(ref sClass))
-        {
-            Console.WriteLine("Error location tlpbc66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Class_String(ref sClass), "[Error] Location tlpbc6");
     }
 
-    void testLPStrBufferArrayOfStructs()
+    static void testLPStrBufferArrayOfStructs()
     {
-        iCountTestCases++;
         LPStrTestStruct[] lpss = new LPStrTestStruct[2];
         lpss[0] = GetInvalidStruct();
         lpss[1] = GetInvalidStruct();
+        Assert.IsTrue(LPStrBuffer_In_Array_Struct(lpss), "[Error] Location tlpsbaos1");
 
-        if (!LPStrBuffer_In_Array_Struct(lpss))
-        {
-            Console.WriteLine("Error location ctlpsa11");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetValidStruct();
         lpss[1] = GetValidStruct();
+        Assert.IsTrue(LPStrBuffer_In_Array_Struct(lpss), "[Error] Location tlpsbaos2");
 
-        if (!LPStrBuffer_In_Array_Struct(lpss))
-        {
-            Console.WriteLine("Error location ctlpsa22");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetInvalidStruct();
         lpss[1] = GetInvalidStruct();
-        if (!LPStrBuffer_InByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("Error location ctlpsa33");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos3");
 
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetValidStruct();
         lpss[1] = GetValidStruct();
+        Assert.IsTrue(LPStrBuffer_InByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos4");
 
-        if (!LPStrBuffer_InByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("Error location ctlpsa44");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetInvalidStruct();
         lpss[1] = GetInvalidStruct();
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos5");
 
-        if (!LPStrBuffer_InOutByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("Error location ctlpsa55");
-            iCountErrors++;
-        }
-
-        iCountTestCases++;
         lpss = new LPStrTestStruct[2];
         lpss[0] = GetValidStruct();
         lpss[1] = GetValidStruct();
-
-        if (!LPStrBuffer_InOutByRef_Array_Struct(ref lpss))
-        {
-            Console.WriteLine("Error location ctlpsa66");
-            iCountErrors++;
-        }
+        Assert.IsTrue(LPStrBuffer_InOutByRef_Array_Struct(ref lpss), "[Error] Location tlpsbaos6");
     }
 
-    Boolean runTest()
+    static void runTest()
     {
         testLPStrBufferString();
-
         testLPStrBufferStringBuilder();
-
         testLPStrBufferStruct();
-
         testLPStrBufferArray();
-
         testLPStrBufferClass();
-
         testLPStrBufferArrayOfStructs();
-
-        if (iCountErrors > 0)
-            return false;
-
-        return true;
     }
 
     public static int Main()
@@ -511,40 +312,17 @@ public class BFM_LPStrMarshaler
             Console.WriteLine("Non english platforms are not supported");
             Console.WriteLine("passing without running tests");
 
-            Console.WriteLine("--- Sucess");
+            Console.WriteLine("--- Success");
             return 100;
         }
-
-        Boolean bResult = false;
-        BFM_LPStrMarshaler v = new BFM_LPStrMarshaler();
 
         try
         {
-            bResult = v.runTest();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-            bResult = false;
-        }
-
-        // ---------- Final Result --------------
-
-        Console.WriteLine("iCountTestCases : " + iCountTestCases);
-        Console.WriteLine("iCountErrors    : " + iCountErrors);
-
-        if (iCountErrors > 0)
-            bResult = false;
-
-        if (bResult == true)
-        {
-            Console.WriteLine("--- Sucess");
+            runTest();
             return 100;
-        }
-        else
-        {
-            Console.WriteLine("--- FAIL!!");
-            return 11;
+        } catch (Exception e){
+            Console.WriteLine($"Test Failure: {e}"); 
+            return 101; 
         }
     }
 }
