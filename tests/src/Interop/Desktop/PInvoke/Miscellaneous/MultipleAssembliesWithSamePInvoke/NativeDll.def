@@ -1,4 +1,0 @@
-LIBRARY NativeDll.dll
-
-EXPORTS 
-        GetInt PRIVATE

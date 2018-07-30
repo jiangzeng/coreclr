@@ -1,6 +1,0 @@
-LIBRARY DllImport_NativeDll.dll
-
-EXPORTS 
-        MarshalPointer_In PRIVATE
-        MarshalPointer_InOut PRIVATE
-        MarshalPointer_Out PRIVATE

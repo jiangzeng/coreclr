@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Interop.settings.targets))\Interop.settings.targets" />
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework Condition="'$(TargetFramework)'==''" >netcoreapp2.0</TargetFramework>
-  </PropertyGroup>
-</Project>

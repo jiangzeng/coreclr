@@ -1,5 +1,0 @@
-EXPORTS
-	MyResourceReleaseMethod
-	SHReleasing_OutParams
-	GetMyResourceReleaseMethodCalled
-	ResetMyResourceReleaseMethodCalled
