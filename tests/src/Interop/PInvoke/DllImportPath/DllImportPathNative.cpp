@@ -22,13 +22,13 @@ extern "C" DLL_EXPORT bool MarshalStringPointer_InOut(/*[in,out]*/LPWSTR *s)
 
         //Expected
         printf("Expected:");
-        wprintf_s(strManaged);
-        printf("\tThe length of Expected:%d\n",lenstrManaged);
+        wprintf_s(L"%s",strManaged);
+        printf("\tThe length of Expected:%d\n",static_cast<int>(lenstrManaged));
 
         //Actual
         printf("Actual:");
-        wprintf_s(*s);
-        printf("\tThe length of Actual:%d\n",len);
+        wprintf_s(L"%s",*s);
+        printf("\tThe length of Actual:%d\n",static_cast<int>(len));
 
         return false;
     }
