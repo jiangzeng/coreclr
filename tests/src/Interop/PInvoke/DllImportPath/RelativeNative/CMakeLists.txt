@@ -5,7 +5,7 @@ project (DllImportPath_Relative)
 include ("${CLR_INTEROP_TEST_ROOT}/Interop.cmake") 
 include_directories(${INC_PLATFORM_DIR}) 
 set(SOURCES 
-    RelativePathNative.cpp 
+    ..\DllPathNative.cpp 
 ) 
 # Additional files to reference: 
 # add the executable 

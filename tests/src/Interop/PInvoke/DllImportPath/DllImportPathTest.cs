@@ -39,13 +39,13 @@ class Test
     [DllImport(@".\RelativeNative\..\DllImportPath_Relative", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
     private static extern bool MarshalStringPointer_InOut_Relative1([In, Out]ref string strManaged);
 
-    [DllImport(@"..\DllImportPath\DllImportPath_Relative.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
+    [DllImport(@"..\DllImportPathTest\DllImportPath_Relative.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
     private static extern bool MarshalStringPointer_InOut_Relative2([In, Out]ref string strManaged);
 
-    [DllImport(@"..\DllImportPath\DllImportPath_Relative", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
+    [DllImport(@"..\DllImportPathTest\DllImportPath_Relative", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
     private static extern bool MarshalStringPointer_InOut_Relative3([In, Out]ref string strManaged);
 
-    [DllImport(@".\..\DllImportPath\DllImportPath_Relative.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
+    [DllImport(@".\..\DllImportPathTest\DllImportPath_Relative.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
     private static extern bool MarshalStringPointer_InOut_Relative4([In, Out]ref string strManaged);
 
     [DllImport(@"DllImportPath_U�n�i�c�o�d�e.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode, EntryPoint = "MarshalStringPointer_InOut")]
@@ -62,26 +62,25 @@ class Test
 
     static void DllExistsOnLocalPath()
     {
-        Console.WriteLine("[Calling Local Path DLL]");
         string strManaged = "Managed";
         string strNative = " Native";
 
-        Console.WriteLine("Scenario1: [Calling MarshalStringPointer_InOut_Local1].");
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_Local1].");
         string strPara1 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Local1(ref strPara1), "the return value is wrong");
         Assert.AreEqual(strNative, strPara1, "the passed string is wrong");
 
-        Console.WriteLine("Scenario2: [Calling MarshalStringPointer_InOut_Local2]");
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_Local2]");
         string strPara2 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Local2(ref strPara2), "the return value is wrong");
         Assert.AreEqual(strNative, strPara2, "the passed string is wrong");
 
-        Console.WriteLine("Scenario3: [Calling MarshalStringPointer_InOut_LocalWithDot1]");
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_LocalWithDot1]");
         string strPara3 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_LocalWithDot1(ref strPara3), "the return value is wrong");
         Assert.AreEqual(strNative, strPara3, "The passed string is wrong");
 
-        Console.WriteLine("Scenario4: [Calling MarshalStringPointer_InOut_LocalWithDot2]");
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_LocalWithDot2]");
         string strPara4 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_LocalWithDot2(ref strPara4), "the return value is wrong");
         Assert.AreEqual(strNative, strPara4, "the passed string is wrong");
@@ -89,25 +88,24 @@ class Test
 
     static void DllExistsOnRelativePath()
     {
-        Console.WriteLine("[Calling Relative Path DLL]");
         string strManaged = "Managed";
         string strNative = " Native";
 
-        Console.WriteLine("Scenario5: [Calling MarshalStringPointer_InOut_Relative1]");
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_Relative1]");
         string strPara5 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Relative1(ref strPara5), "the return value is wrong");
         Assert.AreEqual(strNative, strPara5, "the passed string is wrong");
-
-        Console.WriteLine("Scenario6: [Calling MarshalStringPointer_InOut_Relative2]");
+        
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_Relative2]");
         string strPara6 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Relative2(ref strPara6), "the return value is wrong");
         Assert.AreEqual(strNative, strPara6, "the passed string is wrong");
-
+        
         Console.WriteLine("[Calling MarshalStringPointer_InOut_Relative3]");
         string strPara7 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Relative3(ref strPara7), "the return value is wrong");
         Assert.AreEqual(strNative, strPara7, "the passed string is wrong");
-
+        
         Console.WriteLine("[Calling MarshalStringPointer_InOut_Relative4]");
         string strPara8 = strManaged;
         Assert.IsTrue(MarshalStringPointer_InOut_Relative4(ref strPara8), "the return value is wrong");
@@ -130,10 +128,10 @@ class Test
 
     static void DllExistsUnicode()
     {
-        Console.WriteLine("[Calling Unicode DLL]");
         string managed = "Managed";
         string native = " Native";
-
+        
+        Console.WriteLine("[Calling MarshalStringPointer_InOut_Unicode]");
         Assert.IsTrue(MarshalStringPointer_InOut_Unicode(ref managed), "the return value is wrong");
         Assert.AreEqual(native, managed, "the passed string is wrong");
     }
@@ -144,8 +142,8 @@ class Test
         {
             DllExistsOnLocalPath();
             DllExistsOnRelativePath();
-            DllExistsOnPathEnv();
             DllExistsUnicode();
+            DllExistsOnPathEnv();
             
             return 100;
         } catch (Exception e){
