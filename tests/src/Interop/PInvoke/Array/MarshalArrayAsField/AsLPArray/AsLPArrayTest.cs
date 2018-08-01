@@ -6,7 +6,6 @@ using System;
 using System.Runtime.InteropServices;
 using CoreFXTestLibrary;
 
-//TODO: EntryPointNotFoundException thows but expects TypeLoadException for all tests
 class Test
 {
     [DllImport("MarshalArrayByValArrayNative")]
@@ -176,7 +175,7 @@ class Test
     static void RunTest1(string report)
     {
         Console.WriteLine(report);
-        
+        //TODO: EntryPointNotFoundException thows but expects TypeLoadException for all tests
         S_INTArray_Seq s1 = new S_INTArray_Seq();
         s1.arr = InitArray<int>(ARRAY_SIZE);
         Assert.Throws<TypeLoadException>(() => TakeIntArraySeqStructByVal(s1, ARRAY_SIZE), "TakeIntArraySeqStructByVal");

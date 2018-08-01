@@ -82,19 +82,15 @@ public class CMain
             s.cVal = 'I';
             s.dec = decimal.MinValue;
 
-            if (!TakeStru_Seq_DecAsLPStructAsFldByInOutRef(ref s))
-            {
-                Assert.AreEqual(decimal.MaxValue, s.dec);
-                Assert.AreEqual(3.21, s.dblVal);
-                Assert.AreEqual('C', s.cVal);
-            }
-            else
-                Assert.Fail("TakeStru_Seq_DecAsLPStructAsFldByInOutRef : Returned false");
+            Assert.IsTrue(TakeStru_Seq_DecAsLPStructAsFldByInOutRef(ref s), "TakeStru_Seq_DecAsLPStructAsFldByInOutRef : Returned false");
+            Assert.AreEqual(decimal.MaxValue, s.dec);
+            Assert.AreEqual(3.21, s.dblVal);
+            Assert.AreEqual('C', s.cVal);
         }
         catch (MarshalDirectiveException)
         {
 
-        } 
+        }         
         */
     }
 
