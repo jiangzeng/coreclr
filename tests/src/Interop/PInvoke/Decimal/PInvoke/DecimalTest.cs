@@ -6,6 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using CoreFXTestLibrary;
 
+#pragma warning disable 618
 #region Struct Def
 [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
 public struct Stru_Exp_DecAsCYAsFld
@@ -131,3 +132,4 @@ public class CMain
         }
     }
 }
+#pragma warning restore 618

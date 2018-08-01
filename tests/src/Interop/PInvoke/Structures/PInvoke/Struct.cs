@@ -164,6 +164,7 @@ public struct StringStructSequentialUnicode
     public string last;
 }
 
+#pragma warning disable 618
 [StructLayout(LayoutKind.Sequential)]
 public struct PritypeStructSeqWithUnmanagedType
 {
@@ -182,6 +183,7 @@ public struct PritypeStructSeqWithUnmanagedType
     [MarshalAs(UnmanagedType.I1)]
     public sbyte mySByte;
 }
+#pragma warning restore 618
 
 public struct StructSequentialWithDelegateField
 {

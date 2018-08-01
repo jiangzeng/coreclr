@@ -7,6 +7,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using CoreFXTestLibrary;
 
+#pragma warning disable 618
 [StructLayout(LayoutKind.Sequential)]
 public struct Stru_Seq_DateAsStructAsFld
 {
@@ -167,4 +168,5 @@ class DatetimeTest
         }
     }
 }
+#pragma warning restore 618
 

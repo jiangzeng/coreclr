@@ -25,6 +25,7 @@ public class LPStrTestClass
 
 public class BFM_LPStrMarshaler
 {
+#pragma warning disable 618
     [DllImport("LPStr_BestFitMappingNative")]
     public static extern bool LPStrBuffer_In_String([In][MarshalAs(UnmanagedType.LPStr)]String s);
 
@@ -78,6 +79,7 @@ public class BFM_LPStrMarshaler
 
     [DllImport("LPStr_BestFitMappingNative")]
     public static extern bool LPStrBuffer_InOutByRef_Array_Struct([In, Out][MarshalAs(UnmanagedType.LPArray)]ref LPStrTestStruct[] structArray);
+#pragma warning restore 618
 
     static String GetValidString()
     {
