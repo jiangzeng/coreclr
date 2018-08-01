@@ -517,8 +517,8 @@ public class SHTester_MA
     [DllImport("PInvoke_SafeHandle", SetLastError = true)]
     public static extern bool SHFldInvalid_MA(StructMA4 s);
 
-    //[DllImport("PInvoke_SafeHandle", SetLastError = true)]
-    //public static extern bool SHFldInvalid_MA(StructMA5 s);
+    [DllImport("PInvoke_SafeHandle", SetLastError = true)]
+    public static extern bool SHFldInvalid_MA(StructMA5 s);
 
     [DllImport("PInvoke_SafeHandle", SetLastError = true)]
     public static extern bool SHFldInvalid_MA(StructMA6 s);
@@ -636,12 +636,10 @@ public class SHTester_MA
         Console.WriteLine("Testing StructMA4...");
         Assert.Throws<TypeLoadException>(() => SHFldInvalid_MA(s4), "FAILED!  Exception not thrown.");
 
-        /* 
         StructMA5 s5 = new StructMA5();
         s5.hnd = Helper.NewSFH();
         Console.WriteLine("Testing StructMA5...");
         Assert.Throws<TypeLoadException>(() => SHFldInvalid_MA(s5), "FAILED!  Exception not thrown.");
-        */
 
         StructMA6 s6 = new StructMA6();
         s6.hnd = Helper.NewSFH();

@@ -106,15 +106,12 @@ namespace SafeHandlesTests{
         public SafeFileHandle hnd;
     }
 
-    //Disabling this scenario in ProjectN since instead of throwing
-    //an excpetion at runtimewe throw an MCG error at compile time 
-    //
-    //[StructLayout(LayoutKind.Sequential)]
-    //public struct StructMA5
-    //{
-    //    [MarshalAs(UnmanagedType.ByValArray)]
-    //    public SafeFileHandle hnd;
-    //}
+    [StructLayout(LayoutKind.Sequential)]
+    public struct StructMA5
+    {
+        [MarshalAs(UnmanagedType.ByValArray)]
+        public SafeFileHandle hnd;
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct StructMA6
