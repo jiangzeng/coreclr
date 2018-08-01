@@ -6,8 +6,8 @@ using System;
 using System.Runtime.InteropServices;
 using SafeHandlesTests;
 
-namespace SafeHandlesTests{
 #pragma warning disable 618
+namespace SafeHandlesTests{
     [StructLayout(LayoutKind.Sequential)]
     public struct StructWithSHFld
     {
@@ -327,8 +327,8 @@ namespace SafeHandlesTests{
     //	[MarshalAs(UnmanagedType.VBByRefStr)]
     //	public SafeFileHandle hnd;
     //}
-    #pragma warning restore 618
 }
+#pragma warning restore 618
 
 
 
